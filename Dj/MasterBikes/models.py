@@ -43,6 +43,8 @@ class FormaPago(models.Model):
         return (
             str(self.forma)
         )
+    class Meta:
+        verbose_name_plural = "Formas de pago"
 
 class Arriendo(models.Model):
     id_arriendo = models.AutoField(primary_key=True, db_column="idArriendo")
@@ -123,8 +125,10 @@ class Reparacion(models.Model):
             + " "
             + str(self.rut)
         )
+    class Meta:
+        verbose_name_plural = "Reparaciones"
     
-class   Pago(models.Model):
+class Pago(models.Model):
     id_pago = models.AutoField(primary_key=True, db_column="idPago")
     rut = models.ForeignKey(
         "Usuario", on_delete=models.CASCADE, db_column="rut"
@@ -132,7 +136,7 @@ class   Pago(models.Model):
     cantidad = models.IntegerField()
     total = models.IntegerField()
     metodo_pago = models.CharField(max_length=30)
-    despacho = models.BooleanField()
+    domicilio = models.BooleanField()
 
 class Detalle(models.Model):
     id_detalle = models.AutoField(primary_key=True, db_column="idDetalle")
@@ -149,6 +153,6 @@ class Despacho(models.Model):
     id_pago = models.ForeignKey(
         "Pago", on_delete=models.CASCADE, db_column="idPago"
     )
-    pedido = models.DateField()
-    envio = models.DateField()
-    recibo = models.DateField()
+    pedido = models.DateTimeField()
+    envio = models.DateTimeField()
+    recibo = models.DateTimeField()
