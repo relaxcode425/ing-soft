@@ -123,3 +123,32 @@ class Reparacion(models.Model):
             + " "
             + str(self.rut)
         )
+    
+class   Pago(models.Model):
+    id_pago = models.AutoField(primary_key=True, db_column="idPago")
+    rut = models.ForeignKey(
+        "Usuario", on_delete=models.CASCADE, db_column="rut"
+    )
+    cantidad = models.IntegerField()
+    total = models.IntegerField()
+    metodo_pago = models.CharField(max_length=30)
+    despacho = models.BooleanField()
+
+class Detalle(models.Model):
+    id_detalle = models.AutoField(primary_key=True, db_column="idDetalle")
+    id_pago = models.ForeignKey(
+        "Pago", on_delete=models.CASCADE, db_column="idPago"
+    )
+    id_producto = models.ForeignKey(
+        "Producto", on_delete=models.CASCADE, db_column="idProducto"
+    )
+    subtotal = models.IntegerField()
+
+class Despacho(models.Model):
+    id_despacho = models.AutoField(primary_key=True, db_column="idDespacho")
+    id_pago = models.ForeignKey(
+        "Pago", on_delete=models.CASCADE, db_column="idPago"
+    )
+    pedido = models.DateField()
+    envio = models.DateField()
+    recibo = models.DateField()
