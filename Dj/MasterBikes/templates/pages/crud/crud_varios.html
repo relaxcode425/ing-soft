@@ -17,32 +17,28 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-8 shadow-lg mx-auto text-center p-3">
-                    <h2 class="my-3">Lista Usuarios</h2><br>
                     {% if request.user.is_authenticated %}
                         <h3>Bienvenido {{request.user.username }}</h3>
-                        <a href="">
-                            <button class="btn btn-danger my-3">
-                                Cerrar Sesion
-                            </button>
-                        </a>
                     {% else %}
                         <h3>Bienvenido Invitado</h3>
                     {% endif%}
+                    <h2 class="my-3">Lista Tipo de Usuarios</h2>
+                    <br>
                     <table class="table table-dark table-hover table-bordered">
                         <thead>
-                            <th>Rut</th>
-                            <th>Nombre</th>
-                            <th>Apellido</th>
+                            <th>Id</th>
+                            <th>Tipo de usuario</th>
+                            <th>descripcion</th>
                             <th>Modificar</th>
                             <th>Eliminar</th>
                         </thead>
                         <tbody>
-                            {% if usuarios %}
-                                {% for tmp in usuarios%}
+                            {% if tipoUsuarios %}
+                                {% for tmp in tipoUsuarios%}
                                     <tr>
-                                        <td>{{tmp.rut}}</td>
-                                        <td>{{tmp.nombre}}</td>
-                                        <td>{{tmp.apellido_paterno}}</td>
+                                        <td>{{tmp.id_tipo_usuario}}</td>
+                                        <td>{{tmp.tipo}}</td>
+                                        <td>{{tmp.descripcion}}</td>
                                         <td><a href=""> <!-- url 'user_findEdit' pk=tmp.rut -->
                                             <button class="btn btn-warning">Modificar</button>
                                         </a></td>
@@ -62,10 +58,205 @@
                     <a href="">
                         <button class="btn btn-primary">Agregar Registro</button>
                     </a>
+                </div>
+            </div>
+            <br>
+            <br>
+            <div class="row">
+                <div class="col-md-8 shadow-lg mx-auto text-center p-3">
+                    <h2 class="my-3">Lista Tallas de Bicicleta</h2>
+                    <br>
+                    <table class="table table-dark table-hover table-bordered">
+                        <thead>
+                            <th>Id</th>
+                            <th>Talla</th>
+                            <th>Modificar</th>
+                            <th>Eliminar</th>
+                        </thead>
+                        <tbody>
+                            {% if talla %}
+                                {% for tmp in talla %}
+                                    <tr>
+                                        <td>{{tmp.id_talla}}</td>
+                                        <td>{{tmp.talla}}</td>
+                                        <td><a href=""> <!-- url 'user_findEdit' pk=tmp.rut -->
+                                            <button class="btn btn-warning">Modificar</button>
+                                        </a></td>
+                                        <td><a href=""> <!-- url 'user_del' pk=tmp.rut -->
+                                            <button class="btn btn-danger">Eliminar</button>
+                                        </a></td>
+                                    </tr>
+                                {% endfor%}
+                            {% endif %}
+                        </tbody>
+                    </table>
+                    {% if mensaje%}
+                        <div class="alert alert-danger w-50 mx-auto">
+                            {{mensaje}}
+                        </div>
+                    {% endif%}
                     <a href="">
-                        <button class="btn btn-info">
-                            Ver...
-                        </button>
+                        <button class="btn btn-primary">Agregar Registro</button>
+                    </a>
+                </div>
+            </div>
+            <br>
+            <br>
+            <div class="row">
+                <div class="col-md-8 shadow-lg mx-auto text-center p-3">
+                    <h2 class="my-3">Lista Tipo de Bicicletas</h2>
+                    <br>
+                    <table class="table table-dark table-hover table-bordered">
+                        <thead>
+                            <th>Id</th>
+                            <th>Tipo de Bicicleta</th>
+                            <th>Modificar</th>
+                            <th>Eliminar</th>
+                        </thead>
+                        <tbody>
+                            {% if tipoBici %}
+                                {% for tmp in tipoBici%}
+                                    <tr>
+                                        <td>{{tmp.id_tipo_bici}}</td>
+                                        <td>{{tmp.tipo}}</td>
+                                        <td><a href=""> <!-- url 'user_findEdit' pk=tmp.rut -->
+                                            <button class="btn btn-warning">Modificar</button>
+                                        </a></td>
+                                        <td><a href=""> <!-- url 'user_del' pk=tmp.rut -->
+                                            <button class="btn btn-danger">Eliminar</button>
+                                        </a></td>
+                                    </tr>
+                                {% endfor%}
+                            {% endif %}
+                        </tbody>
+                    </table>
+                    {% if mensaje%}
+                        <div class="alert alert-danger w-50 mx-auto">
+                            {{mensaje}}
+                        </div>
+                    {% endif%}
+                    <a href="">
+                        <button class="btn btn-primary">Agregar Registro</button>
+                    </a>
+                </div>
+            </div>
+            <br>
+            <br>
+            <div class="row">
+                <div class="col-md-8 shadow-lg mx-auto text-center p-3">
+                    <h2 class="my-3">Lista Formas de Pago</h2>
+                    <br>
+                    <table class="table table-dark table-hover table-bordered">
+                        <thead>
+                            <th>Id</th>
+                            <th>Forma de Pago</th>
+                            <th>Modificar</th>
+                            <th>Eliminar</th>
+                        </thead>
+                        <tbody>
+                            {% if formaPago %}
+                                {% for tmp in formaPago%}
+                                    <tr>
+                                        <td>{{tmp.id_forma_pago}}</td>
+                                        <td>{{tmp.forma}}</td>
+                                        <td><a href=""> <!-- url 'user_findEdit' pk=tmp.rut -->
+                                            <button class="btn btn-warning">Modificar</button>
+                                        </a></td>
+                                        <td><a href=""> <!-- url 'user_del' pk=tmp.rut -->
+                                            <button class="btn btn-danger">Eliminar</button>
+                                        </a></td>
+                                    </tr>
+                                {% endfor%}
+                            {% endif %}
+                        </tbody>
+                    </table>
+                    {% if mensaje%}
+                        <div class="alert alert-danger w-50 mx-auto">
+                            {{mensaje}}
+                        </div>
+                    {% endif%}
+                    <a href="">
+                        <button class="btn btn-primary">Agregar Registro</button>
+                    </a>
+                </div>
+            </div>
+            <br>
+            <br>
+            <div class="row">
+                <div class="col-md-8 shadow-lg mx-auto text-center p-3">
+                    <h2 class="my-3">Lista Tipo de Productos</h2>
+                    <br>
+                    <table class="table table-dark table-hover table-bordered">
+                        <thead>
+                            <th>Id</th>
+                            <th>Tipo de Producto</th>
+                            <th>Modificar</th>
+                            <th>Eliminar</th>
+                        </thead>
+                        <tbody>
+                            {% if tipoProducto %}
+                                {% for tmp in tipoProducto%}
+                                    <tr>
+                                        <td>{{tmp.id_tipo_producto}}</td>
+                                        <td>{{tmp.tipo}}</td>
+                                        <td><a href=""> <!-- url 'user_findEdit' pk=tmp.rut -->
+                                            <button class="btn btn-warning">Modificar</button>
+                                        </a></td>
+                                        <td><a href=""> <!-- url 'user_del' pk=tmp.rut -->
+                                            <button class="btn btn-danger">Eliminar</button>
+                                        </a></td>
+                                    </tr>
+                                {% endfor%}
+                            {% endif %}
+                        </tbody>
+                    </table>
+                    {% if mensaje%}
+                        <div class="alert alert-danger w-50 mx-auto">
+                            {{mensaje}}
+                        </div>
+                    {% endif%}
+                    <a href="">
+                        <button class="btn btn-primary">Agregar Registro</button>
+                    </a>
+                </div>
+            </div>
+            <br>
+            <br>
+            <div class="row">
+                <div class="col-md-8 shadow-lg mx-auto text-center p-3">
+                    <h2 class="my-3">Lista Estados de Reparación</h2>
+                    <br>
+                    <table class="table table-dark table-hover table-bordered">
+                        <thead>
+                            <th>Id</th>
+                            <th>Estado de reparación</th>
+                            <th>Modificar</th>
+                            <th>Eliminar</th>
+                        </thead>
+                        <tbody>
+                            {% if estado %}
+                                {% for tmp in estado%}
+                                    <tr>
+                                        <td>{{tmp.id_estado}}</td>
+                                        <td>{{tmp.tipo}}</td>
+                                        <td><a href=""> <!-- url 'user_findEdit' pk=tmp.rut -->
+                                            <button class="btn btn-warning">Modificar</button>
+                                        </a></td>
+                                        <td><a href=""> <!-- url 'user_del' pk=tmp.rut -->
+                                            <button class="btn btn-danger">Eliminar</button>
+                                        </a></td>
+                                    </tr>
+                                {% endfor%}
+                            {% endif %}
+                        </tbody>
+                    </table>
+                    {% if mensaje%}
+                        <div class="alert alert-danger w-50 mx-auto">
+                            {{mensaje}}
+                        </div>
+                    {% endif%}
+                    <a href="">
+                        <button class="btn btn-primary">Agregar Registro</button>
                     </a>
                 </div>
             </div>

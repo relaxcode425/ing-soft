@@ -120,7 +120,7 @@ class Estado(models.Model):
     tipo = models.CharField(max_length=30)
     def __str__(self):
         return (
-            str(self.estado)
+            str(self.tipo)
         )
 
 class Reparacion(models.Model):

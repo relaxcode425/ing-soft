@@ -1,7 +1,8 @@
 from django.contrib import admin
-from .models import Usuario, Talla, TipoBici, FormaPago, Arriendo, TipoProducto, Producto, Estado, Reparacion, Pago, Detalle, Despacho
+from .models import TipoUsuario, Usuario, Talla, TipoBici, FormaPago, Arriendo, TipoProducto, Producto, Estado, Reparacion, Pago, Detalle, Despacho
 
 # Register your models here.
+admin.site.register(TipoUsuario)
 admin.site.register(Usuario)
 admin.site.register(Talla)
 admin.site.register(TipoBici)
