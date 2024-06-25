@@ -1,15 +1,32 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
+class TipoUsuario(models.Model):
+    id_tipo_usuario = models.AutoField(primary_key=True, db_column="idTipoUsuario")
+    tipo = models.CharField(max_length=30)
+    descripcion = models.CharField(max_length=60)
+
+    def __str__(self):
+        return (
+            str(self.tipo)
+        )
+
 class Usuario(models.Model):
     rut = models.CharField(primary_key=True, max_length=10)
-    nombre = models.CharField(max_length=20)
+    """ nombre = models.CharField(max_length=20)
     apellido_paterno = models.CharField(max_length=20)
     apellido_materno = models.CharField(max_length=20)
     email = models.EmailField(max_length=100, unique=True, blank=True, null=True)
     nickname = models.CharField(max_length=30, unique=True)
     password = models.CharField(max_length=30)
-    activo = models.BooleanField()
+    activo = models.BooleanField() """
+    username = models.ForeignKey(
+        User, on_delete=models.CASCADE, db_column="username"
+    )
+    id_tipo_usuario = models.ForeignKey(
+        "TipoUsuario", on_delete=models.CASCADE, db_column="idTipoUsuario"
+    )
 
     def __str__(self):
         return (
