@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import TipoUsuario, Talla, TipoBici, FormaPago, TipoProducto,Estado,Usuario
+from .models import TipoUsuario, Talla, TipoBici, FormaPago, TipoProducto,Estado,Usuario,Arriendo,Reparacion
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -19,6 +19,35 @@ def crud_usuarios(request):
         "tipoUsuarios": tipoUsuarios,
     }
     return render(request, 'pages/crud/crud_usuarios.html', context)
+
+def crud_arriendos(request):
+    arriendos = Arriendo.objects.all()
+    usuarios = User.objects.all()
+    detalle = Usuario.objects.all()
+    talla = Talla.objects.all()
+    formaPago = FormaPago.objects.all()
+    tipoBici = TipoBici.objects.all()
+    context={
+        "usuarios" : usuarios,
+        "detalle" : detalle,
+        "arriendos" : arriendos,
+        "talla" : talla,
+        "formaPago" : formaPago,
+        "tipoBici" : tipoBici
+    }
+    return render(request, 'pages/crud/crud_arriendos.html', context)
+
+def crud_reparacion(request):
+    usuarios = User.objects.all()
+    detalle = Usuario.objects.all()
+    estado = Estado.objects.all()
+    reparaciones = Reparacion.objects.all()
+    context={
+        "usuarios" : usuarios,
+        "detalle" : detalle,
+        "estado" : estado,
+    }
+    return render(request, 'pages/crud/crud_reparacion.html', context)
 
 def crud_varios(request):
     tipoUsuarios = TipoUsuario.objects.all()
