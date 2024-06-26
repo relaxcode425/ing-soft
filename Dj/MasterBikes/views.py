@@ -85,3 +85,7 @@ def crud_varios(request):
         "estado" : estado,
     }
     return render(request, "pages/crud/crud_varios.html", context)
+
+def Principal(request):
+    context={}
+    return render(request, 'pages/Principal.html', context)
