@@ -125,7 +125,7 @@ class Reparacion(models.Model):
         "Usuario", on_delete=models.CASCADE, db_column="rut"
     )
     modelo_bicicleta = models.CharField(max_length=80)
-    problema = models.CharField(max_length=150)
+    problema = models.CharField(max_length=150, blank=True, null=True)
     id_estado = models.ForeignKey(
         "Estado", on_delete=models.CASCADE, db_column="idEstado"
     )
@@ -146,9 +146,10 @@ class Pago(models.Model):
     rut = models.ForeignKey(
         "Usuario", on_delete=models.CASCADE, db_column="rut"
     )
-    cantidad = models.IntegerField()
     total = models.IntegerField()
-    metodo_pago = models.CharField(max_length=30)
+    id_forma_pago = models.ForeignKey(
+        "FormaPago", on_delete=models.CASCADE, db_column="idFormaPago"
+    )
     domicilio = models.BooleanField()
 
 class Detalle(models.Model):
@@ -159,6 +160,7 @@ class Detalle(models.Model):
     id_producto = models.ForeignKey(
         "Producto", on_delete=models.CASCADE, db_column="idProducto"
     )
+    cantidad = models.IntegerField()
     subtotal = models.IntegerField()
 
 class Despacho(models.Model):
