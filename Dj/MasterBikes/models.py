@@ -30,11 +30,7 @@ class Usuario(models.Model):
 
     def __str__(self):
         return (
-            str(self.nombre)
-            + " "
-            + str(self.apellido_paterno)
-            + " "
-            + str(self.apellido_materno)
+            str(self.rut)
         )
 
 class Talla(models.Model):

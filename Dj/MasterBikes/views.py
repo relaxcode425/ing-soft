@@ -11,10 +11,12 @@ def index(request):
 
 def crud_usuarios(request):
     usuarios = User.objects.all()
-    detalle = Usuario.object.all()
+    detalle = Usuario.objects.all()
+    tipoUsuarios = TipoUsuario.objects.all()
     context={
         "usuarios" : usuarios,
         "detalle" : detalle,
+        "tipoUsuarios": tipoUsuarios,
     }
     return render(request, 'pages/crud/crud_usuarios.html', context)
 
