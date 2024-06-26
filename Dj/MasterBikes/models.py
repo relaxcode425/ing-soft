@@ -168,6 +168,6 @@ class Despacho(models.Model):
     id_pago = models.ForeignKey(
         "Pago", on_delete=models.CASCADE, db_column="idPago"
     )
-    pedido = models.DateTimeField()
-    envio = models.DateTimeField()
-    recibo = models.DateTimeField()
+    pedido = models.DateTimeField(blank=True,null=True)
+    envio = models.DateTimeField(blank=True,null=True)
+    recibo = models.DateTimeField(blank=True,null=True)

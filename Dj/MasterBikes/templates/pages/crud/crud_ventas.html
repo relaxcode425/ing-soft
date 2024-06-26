@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mantenedor</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css'%}">
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">
+</head>
+<body>
+    {% include 'base/header.html'%}
+    <main>
+        <div class="container">
+            <div class="row">
+                <div class="col-md shadow-lg mx-auto text-center p-3">
+                    <br>
+                    <h2 class="my-3">Compras</h2>
+                    <br>
+                    <h2 class="my-3">Lista de Pagos</h2><br>
+                    
+                    <table class="table table-dark table-hover table-bordered">
+                        <thead>
+                            <th>id</th>
+                            <th>Username</th>
+                            <th>Total del pago</th>
+                            <th>Forma de Pago</th>
+                            <th>Entrega a Domicilio</th>
+                            <th>Modificar</th>
+                            <th>Eliminar</th>
+                        </thead>
+                        <tbody>
+                            {% if pagos %}
+                                {% for tmp in pagos %}
+                                    <tr>
+                                        <td>{{tmp.id_pago}}</td>
+                                        
+                                        {% if usuarios %}
+                                            {% for user in usuarios %}
+                                                {% if detalle %}
+                                                    {% for det in detalle %}
+                                                        {% if tmp.rut.rut == det.rut and user.username == det.username.username %}
+                                                            <td>{{user.username}}</td>
+                                                        {% endif %}
+                                                    {% endfor%}
+                                                {% endif %}
+                                            {% endfor%}
+                                        {% endif %}
+
+                                        <td>{{tmp.total}}$</td>
+                                        
+                                        {% if formaPago %}
+                                            {% for forma in formaPago %}
+                                                {% if forma.id_forma_pago == tmp.id_forma_pago.id_forma_pago %}
+                                                    <td>{{forma.forma}}</td>
+                                                {% endif %}
+                                            {% endfor%}
+                                        {% else %}
+                                            <td>No</td>
+                                        {% endif %}
+
+                                        {% if tmp.domicilio %}
+                                            <td>Si</td>
+                                        {% else %}
+                                            <td>No</td>
+                                        {% endif %}
+                                        
+                                        <td><a href=""><button
+                                            class="btn btn-warning">Modificar</button></a></td>
+                                        <td><a href=""><button
+                                            class="btn btn-danger">Eliminar</button></a></td>
+                                    </tr>
+                                {% endfor%}
+                            {% endif %}
+                        </tbody>
+                    </table>
+                    {% if mensaje%}
+                        <div class="alert alert-danger w-50 mx-auto">
+                            {{mensaje}}
+                        </div>
+                    {% endif%}
+                    <a href="">
+                        <button class="btn btn-primary">
+                            Agregar Registro
+                        </button>
+                    </a>
+                    <a href="{% url 'crud-varios' %}">
+                        <button class="btn btn-info">
+                            Ver formas de pago
+                        </button>
+                    </a>
+                </div>
+            </div>
+            <br>
+            <br>
+            <div class="row">
+                <div class="col-md shadow-lg mx-auto text-center p-3">
+                    <br>
+                    <h2 class="my-3">Lista de Detalles de Pago</h2><br>
+                    
+                    <table class="table table-dark table-hover table-bordered">
+                        <thead>
+                            <th>id</th>
+                            <th>Pago al que Corresponde</th>
+                            <th>Producto pagado</th>
+                            <th>Cantidad</th>
+                            <th>Subtotal de la boleta</th>
+                            <th>Modificar</th>
+                            <th>Eliminar</th>
+                        </thead>
+                        <tbody>
+                            {% if detallePago %}
+                                {% for tmp in detallePago %}
+                                    <tr>
+                                        <td>{{tmp.id_detalle}}</td>
+                                        
+                                        {% if pagos %}
+                                            {% for pag in pagos %}
+                                                {% if pag.id_pago == tmp.id_pago.id_pago %}
+                                                    <td>{{pag.id_pago}}</td>
+                                                {% endif %}
+                                            {% endfor%}
+                                        {% endif %}
+
+                                        {% if productos %}
+                                            {% for pro in productos %}
+                                                {% if pro.id_producto == tmp.id_producto.id_producto %}
+                                                    <td>id:{{pro.id_producto}}-{{pro.nombre}}</td>
+                                                {% endif %}
+                                            {% endfor%}
+                                        {% endif %}
+
+                                        <td>{{tmp.cantidad}}</td>
+
+                                        <td>{{tmp.subtotal}}</td>
+                                        
+                                        <td><a href=""><button
+                                            class="btn btn-warning">Modificar</button></a></td>
+                                        <td><a href=""><button
+                                            class="btn btn-danger">Eliminar</button></a></td>
+                                    </tr>
+                                {% endfor%}
+                            {% endif %}
+                        </tbody>
+                    </table>
+                    {% if mensaje%}
+                        <div class="alert alert-danger w-50 mx-auto">
+                            {{mensaje}}
+                        </div>
+                    {% endif%}
+                    <a href="">
+                        <button class="btn btn-primary">
+                            Agregar Registro
+                        </button>
+                    </a>
+                    <a href="">
+                        <button class="btn btn-info">
+                            Ver Productos
+                        </button>
+                    </a>
+                </div>
+            </div>
+            <br>
+            <br>
+            <div class="row">
+                <div class="col-md shadow-lg mx-auto text-center p-3">
+                    <br>
+                    <h2 class="my-3">Lista de Despachos</h2><br>
+                    
+                    <table class="table table-dark table-hover table-bordered">
+                        <thead>
+                            <th>id</th>
+                            <th>Pago al que Corresponde</th>
+                            <th>Recibo de la Pedido</th>
+                            <th>Salida del Pedido</th>
+                            <th>Recibo del Pedido</th>
+                            <th>Modificar</th>
+                            <th>Eliminar</th>
+                        </thead>
+                        <tbody>
+                            {% if despachos %}
+                                {% for tmp in despachos %}
+                                    <tr>
+                                        <td>{{tmp.id_despacho}}</td>
+                                        
+                                        {% if pagos %}
+                                            {% for pag in pagos %}
+                                                {% if pag.id_pago == tmp.id_pago.id_pago %}
+                                                    <td>{{pag.id_pago}}</td>
+                                                {% endif %}
+                                            {% endfor%}
+                                        {% endif %}
+
+                                        {% if tmp.pedido == null or tmp.pedido == blank %}
+                                            <td>error</td>
+                                        {% else %}
+                                            <td>{{tmp.pedido}}</td>
+                                        {% endif %}
+
+                                        {% if tmp.envio == null or tmp.envio == blank %}
+                                            <td>Pendiente</td>
+                                        {% else %}
+                                            <td>{{tmp.envio}}</td>
+                                        {% endif %}
+
+                                        {% if tmp.recibo == null or tmp.recibo == blank %}
+                                            <td>Pendiente</td>
+                                        {% else %}
+                                            <td>{{tmp.recibo}}</td>
+                                        {% endif %}
+                                        
+                                        <td><a href=""><button
+                                            class="btn btn-warning">Modificar</button></a></td>
+                                        <td><a href=""><button
+                                            class="btn btn-danger">Eliminar</button></a></td>
+                                    </tr>
+                                {% endfor%}
+                            {% endif %}
+                        </tbody>
+                    </table>
+                    {% if mensaje%}
+                        <div class="alert alert-danger w-50 mx-auto">
+                            {{mensaje}}
+                        </div>
+                    {% endif%}
+                    <a href="">
+                        <button class="btn btn-primary">
+                            Agregar Registro
+                        </button>
+                    </a>
+                    <a href="">
+                        <button class="btn btn-info">
+                            Ver Productos
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</body>
+
+</html>

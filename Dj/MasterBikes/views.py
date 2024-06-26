@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import TipoUsuario, Talla, TipoBici, FormaPago, TipoProducto,Estado,Usuario,Arriendo,Reparacion
+from .models import TipoUsuario, Talla, TipoBici, FormaPago, TipoProducto,Estado,Usuario,Arriendo,Reparacion, Pago, Detalle, Despacho, Producto
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -38,16 +38,36 @@ def crud_arriendos(request):
     return render(request, 'pages/crud/crud_arriendos.html', context)
 
 def crud_reparacion(request):
+    reparaciones = Reparacion.objects.all()
     usuarios = User.objects.all()
     detalle = Usuario.objects.all()
     estado = Estado.objects.all()
-    reparaciones = Reparacion.objects.all()
     context={
+        "reparaciones" : reparaciones,
         "usuarios" : usuarios,
         "detalle" : detalle,
         "estado" : estado,
     }
     return render(request, 'pages/crud/crud_reparacion.html', context)
+
+def crud_ventas(request):
+    pagos = Pago.objects.all()
+    usuarios = User.objects.all()
+    detalle = Usuario.objects.all()
+    formaPago = FormaPago.objects.all()
+    detallePago = Detalle.objects.all()
+    productos = Producto.objects.all()
+    despachos = Despacho.objects.all()
+    context={
+        "pagos" : pagos,
+        "usuarios" : usuarios,
+        "detalle" : detalle,
+        "formaPago" : formaPago,
+        "detallePago" : detallePago,
+        "productos" : productos,
+        "despachos" : despachos,
+    }
+    return render(request, 'pages/crud/crud_ventas.html', context)
 
 def crud_varios(request):
     tipoUsuarios = TipoUsuario.objects.all()

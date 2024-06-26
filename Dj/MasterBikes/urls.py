@@ -7,4 +7,5 @@ urlpatterns = [
     path('crud-usuarios', views.crud_usuarios, name='crud-usuarios'),
     path('crud-arriendos', views.crud_arriendos, name='crud-arriendos'),
     path('crud-reparaciones', views.crud_reparacion, name='crud-reparaciones'),
+    path('crud-ventas', views.crud_ventas, name='crud-ventas'),
 ]
