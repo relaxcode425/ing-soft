@@ -56,8 +56,18 @@
                                             <tr>
                                                 <td>{{tmp.username}}</td>
                                                 <td>{{det.rut}}</td>
-                                                <td>{{tmp.first_name}}</td>
-                                                <td>{{tmp.last_name}}</td>
+
+                                                {% if tmp.first_name == null or tmp.first_name == blank or tmp.first_name == "" %}
+                                                    <td>vacío</td>
+                                                {% else %}
+                                                    <td>{{tmp.first_name}}</td>
+                                                {% endif %}
+
+                                                {% if tmp.last_name == null or tmp.last_name == blank or tmp.last_name == "" %}
+                                                    <td>vacío</td>
+                                                {% else %}
+                                                    <td>{{tmp.last_name}}</td>
+                                                {% endif %}
 
                                                 {% for tipo in tipoUsuarios %}
                                                     {% if tipo.id_tipo_usuario == det.id_tipo_usuario.id_tipo_usuario %}

@@ -18,9 +18,9 @@
             <div class="row">
                 <div class="col-md-8 shadow-lg mx-auto text-center p-3">
 
-                    <h4>Formulario para Tipo de Usuario:</h4>
+                    <h4>Formulario para Tallas de Bicicleta:</h4>
                     <br><br>
-                    <form action="{% url 'add-tipo-usuario' %}" method="POST">
+                    <form action="{% url 'add-talla' %}" method="POST">
                         {% csrf_token %}
                         <div>
                             {{form.as_p}}

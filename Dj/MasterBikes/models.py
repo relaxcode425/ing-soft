@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 # Create your models here.
 class TipoUsuario(models.Model):
     id_tipo_usuario = models.AutoField(primary_key=True, db_column="idTipoUsuario")
-    tipo = models.CharField(max_length=30)
+    tipo = models.CharField(max_length=30, db_column="Tipo de Usuario")
     descripcion = models.CharField(max_length=60)
 
     def __str__(self):

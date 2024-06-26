@@ -9,4 +9,8 @@ urlpatterns = [
     path('crud-ventas', views.crud_ventas, name='crud-ventas'),
     path('', views.Principal, name='Principal'),
     path('tienda', views.tienda, name='tienda'),
+    path('add-tipo-usuario', views.add_tipoUsuario, name='add-tipo-usuario'),
+    
 ]
+
+""" path('edit-tipo-usuario', views.edit_tipoUsuario, name='edit-tipo-usuario'), """
