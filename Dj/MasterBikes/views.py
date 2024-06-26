@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import TipoUsuario, Talla, TipoBici, FormaPago, TipoProducto,Estado
+from .models import TipoUsuario, Talla, TipoBici, FormaPago, TipoProducto,Estado,Usuario
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -10,7 +10,12 @@ def index(request):
     return render(request, 'pages/index.html', context)
 
 def crud_usuarios(request):
-    context={}
+    usuarios = User.objects.all()
+    detalle = Usuario.object.all()
+    context={
+        "usuarios" : usuarios,
+        "detalle" : detalle,
+    }
     return render(request, 'pages/crud/crud_usuarios.html', context)
 
 def crud_varios(request):
