@@ -89,3 +89,7 @@ def crud_varios(request):
 def Principal(request):
     context={}
     return render(request, 'pages/Principal.html', context)
+
+def tienda(request):
+    context={}
+    return render(request, 'pages/tienda.html', context)
