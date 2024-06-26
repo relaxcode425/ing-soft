@@ -18,7 +18,7 @@ def crud_usuarios(request):
         "detalle" : detalle,
         "tipoUsuarios": tipoUsuarios,
     }
-    return render(request, 'pages/crud/crud_usuarios.html', context)
+    return render(request, 'pages/despliegue/crud_usuarios.html', context)
 
 def crud_arriendos(request):
     arriendos = Arriendo.objects.all()
@@ -35,7 +35,7 @@ def crud_arriendos(request):
         "formaPago" : formaPago,
         "tipoBici" : tipoBici
     }
-    return render(request, 'pages/crud/crud_arriendos.html', context)
+    return render(request, 'pages/despliegue/crud_arriendos.html', context)
 
 def crud_reparacion(request):
     reparaciones = Reparacion.objects.all()
@@ -48,7 +48,7 @@ def crud_reparacion(request):
         "detalle" : detalle,
         "estado" : estado,
     }
-    return render(request, 'pages/crud/crud_reparacion.html', context)
+    return render(request, 'pages/despliegue/crud_reparacion.html', context)
 
 def crud_ventas(request):
     pagos = Pago.objects.all()
@@ -67,7 +67,7 @@ def crud_ventas(request):
         "productos" : productos,
         "despachos" : despachos,
     }
-    return render(request, 'pages/crud/crud_ventas.html', context)
+    return render(request, 'pages/despliegue/crud_ventas.html', context)
 
 def crud_varios(request):
     tipoUsuarios = TipoUsuario.objects.all()
@@ -84,7 +84,7 @@ def crud_varios(request):
         "tipoProducto" : tipoProducto,
         "estado" : estado,
     }
-    return render(request, "pages/crud/crud_varios.html", context)
+    return render(request, "pages/despliegue/crud_varios.html", context)
 
 def Principal(request):
     context={}
