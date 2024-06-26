@@ -5,9 +5,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
 # Create your views here.
-def index(request):
-    context={}
-    return render(request, 'pages/index.html', context)
 
 def crud_usuarios(request):
     usuarios = User.objects.all()
