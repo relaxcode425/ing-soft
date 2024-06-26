@@ -9,6 +9,10 @@ def index(request):
     context={}
     return render(request, 'pages/index.html', context)
 
+def crud_usuarios(request):
+    context={}
+    return render(request, 'pages/crud/crud_usuarios.html', context)
+
 def crud_varios(request):
     tipoUsuarios = TipoUsuario.objects.all()
     talla = Talla.objects.all()
