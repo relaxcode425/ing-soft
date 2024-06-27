@@ -291,7 +291,6 @@ def edit_tipoUser(request,pk):
         mensaje="id no existe"
         context={'mensaje': mensaje, 'tipoUsuarios': tipoUsuarios}
         return render(request, "pages/despliegue/crud_varios.html", context)
-
 """ --------------------------------------------------------------------------- """
 def loginSession(request):
     if request.method=="POST":

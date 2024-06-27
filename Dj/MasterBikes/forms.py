@@ -56,6 +56,15 @@ class EstadoForm(ModelForm):
         model = Estado
         fields = ['tipo']
 
+class UsuarioForm(ModelForm):
+    rut = forms.Charfield(max_length=10,
+                              required=True)
+    descripcion = forms.Charfield(max_length=30,
+                                      required=True)
+    class Meta:
+        model = Usuario
+        fields = ['rut']
+
 
 
 
