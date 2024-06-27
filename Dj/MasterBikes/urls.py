@@ -3,8 +3,8 @@ from MasterBikes import views
 
 urlpatterns = [
 
-    path("login", views.conectar, name="login"),
-    path("logout", views.desconectar, name="logout"),
+    path('login', views.conectar, name='login'),
+    path('logout', views.desconectar, name='logout'),
 
     path('', views.Principal, name='Principal'),
     path('arriendo', views.arriendo, name='arriendo'),

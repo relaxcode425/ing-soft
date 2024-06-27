@@ -11,6 +11,7 @@ from .forms import TipoUsuarioForm, TallaForm,BiciForm,FormaPagoForm,TipoProduct
 def imagen(request,nm):
     return
 """ --------------------------------------------------------------------------- """
+@login_required
 def crud_usuarios(request):
     usuarios = User.objects.all()
     detalle = Usuario.objects.all()
@@ -21,7 +22,7 @@ def crud_usuarios(request):
         "tipoUsuarios": tipoUsuarios,
     }
     return render(request, 'pages/despliegue/crud_usuarios.html', context)
-
+@login_required
 def crud_productos(request):
     productos = Producto.objects.all()
     tipoProductos = TipoProducto.objects.all()
@@ -30,7 +31,7 @@ def crud_productos(request):
         "tipoProductos" : tipoProductos,
     }
     return render(request, 'pages/despliegue/crud_productos.html', context)
-
+@login_required
 def crud_arriendos(request):
     arriendos = Arriendo.objects.all()
     usuarios = User.objects.all()
@@ -47,7 +48,7 @@ def crud_arriendos(request):
         "tipoBici" : tipoBici
     }
     return render(request, 'pages/despliegue/crud_arriendos.html', context)
-
+@login_required
 def crud_reparacion(request):
     reparaciones = Reparacion.objects.all()
     usuarios = User.objects.all()
@@ -60,7 +61,7 @@ def crud_reparacion(request):
         "estado" : estado,
     }
     return render(request, 'pages/despliegue/crud_reparacion.html', context)
-
+@login_required
 def crud_ventas(request):
     pagos = Pago.objects.all()
     usuarios = User.objects.all()
@@ -79,7 +80,7 @@ def crud_ventas(request):
         "despachos" : despachos,
     }
     return render(request, 'pages/despliegue/crud_ventas.html', context)
-
+@login_required
 def crud_varios(request):
     tipoUsuarios = TipoUsuario.objects.all()
     talla = Talla.objects.all()
@@ -122,7 +123,7 @@ def Tienda(request):
     context={}
     return render(request, 'pages/Tienda.html', context)
 """ --------------------------------------------------------------------------- """
-
+@login_required
 def add_tipoUsuario(request):
     form = TipoUsuarioForm()
     if request.method=="POST":
@@ -140,7 +141,7 @@ def add_tipoUsuario(request):
             "form":form
         }
         return render(request,"pages/agregar/varios/add_TipoUser.html",context)
-
+@login_required
 def add_talla(request):
     form = TallaForm()
     if request.method=="POST":
@@ -158,7 +159,7 @@ def add_talla(request):
             "form":form
         }
         return render(request,"pages/agregar/varios/add_talla.html",context)
-
+@login_required
 def add_bici(request):
     form = BiciForm()
     if request.method=="POST":
@@ -176,7 +177,7 @@ def add_bici(request):
             "form":form
         }
         return render(request,"pages/agregar/varios/add_TipoBici.html",context)
-
+@login_required
 def add_forma_pago(request):
     form = FormaPagoForm()
     if request.method=="POST":
@@ -194,7 +195,7 @@ def add_forma_pago(request):
             "form":form
         }
         return render(request,"pages/agregar/varios/add_formaPago.html",context)
-
+@login_required
 def add_tipo_producto(request):
     form = TipoProductoForm()
     if request.method=="POST":
@@ -212,7 +213,7 @@ def add_tipo_producto(request):
             "form":form
         }
         return render(request,"pages/agregar/varios/add_tipoProducto.html",context)
-
+@login_required
 def add_estado(request):
     form = EstadoForm()
     if request.method=="POST":
@@ -230,7 +231,7 @@ def add_estado(request):
             "form":form
         }
         return render(request,"pages/agregar/varios/add_estado.html",context)
-
+@login_required
 def del_tipoUser(request,pk):
     try:
         tipoUsuarios = TipoUsuario.objects.get(id_tipo_usuario=pk)
@@ -269,7 +270,7 @@ def del_tipoUser(request,pk):
             "estado" : estado,
         }
         return render(request,"pages/despliegue/crud_varios.html",context)
-
+@login_required
 def edit_tipoUser(request,pk):
 
     try:
@@ -298,7 +299,7 @@ def edit_tipoUser(request,pk):
         mensaje="id no existe"
         context={'mensaje': mensaje, 'tipoUsuarios': tipoUsuarios}
         return render(request, "pages/despliegue/crud_varios.html", context)
-    
+
 """ --------------------------------------------------------------------------- """
 def loginSession(request):
     if request.method=="POST":

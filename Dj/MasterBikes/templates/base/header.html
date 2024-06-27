@@ -5,28 +5,37 @@
 
             <!-- icono izquierda -->
             <div class="col-4">
-                <a href=""><img class="d-block mx-auto" src="{% static 'img/image.png' %}" width="130" alt=""></a>
+                <a href="{% url 'Principal' %}"><img class="d-block mx-auto" src="{% static 'img/image.png' %}" width="130" alt=""></a>
             </div>
             <!-- fin icono izquierda -->
 
             <!-- barra de busqueda -->
             <div class="col-4">
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="¿Qué estás buscando?" aria-label="Search">
-                    <button class="btn btn-dark" type="submit">Buscar</button>
-                  </form>
+              <form class="d-flex" role="search">
+                <input class="form-control me-2" type="search" placeholder="¿Qué estás buscando?" aria-label="Search">
+                <button class="btn btn-dark" type="submit">Buscar</button>
+              </form>
             </div>
             <!-- fin barra de busqueda -->
           <!-- Icono inicio de sesión -->
           <div class="col-2" >
-            <div class="icon-container1">
-              <a href=""><i id="login" class="fa-solid fa-user icon"></i></a>
+            {% if request.user.is_authenticated %}
+              <a href="">
+                <button class="btn btn-danger my-1">
+                    Cerrar Sesion
+                </button>
+              </a>
+            {% else %}
+              <div class="icon-container1">
+                <a href=""><i id="login" class="fa-solid fa-user icon"></i></a>
+              </div>
+            {% endif%}
           </div>
-          </div>
-            <!-- icono derecha -->
+
+          <!-- icono derecha -->
           <div class="col-2">
             <div class="icon-container2">
-            <a href=""><i id="carrito" class="fa-solid fa-cart-shopping"></i></a>
+            <a href="{% url 'tienda' %}"><i id="carrito" class="fa-solid fa-cart-shopping"></i></a>
           </div>
           
           <!-- fin icono derecha -->
@@ -34,58 +43,64 @@
         </div>
         <div class="row">
             
-            <!-- inicio navbar -->
-            <nav class="navbar navbar-expand-lg bg-body-tertiary">
-              <div class="container-fluid bg-dark bg-opacity-100" >
-                <!-- <a class="navbar-brand" href="#"><img src="img/pata.png" width="45" alt=""></a> -->
-                
-                <button style="background-color: rgb(0, 0, 0); border-color: rgb(68, 68, 68);" class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                  <span class="navbar-toggler-icon"></span>
-                </button>
-                
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                  <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-                    <!-- <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="#">Home</a>
-                    </li> -->
-                    
-                    <!-- <li class="nav-item">
-                      <a class="nav-link" href="#">Link</a>
-                    </li> -->
-                    <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" style="color: white;" href="">INICIO</a>
-                    </li>
+          <!-- inicio navbar -->
+          <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid bg-dark bg-opacity-100" >
+              <!-- <a class="navbar-brand" href="#"><img src="img/pata.png" width="45" alt=""></a> -->
+              
+              <button style="background-color: rgb(0, 0, 0); border-color: rgb(68, 68, 68);" class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                  <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" style="color: white;" href="{% url 'Principal' %}">INICIO</a>
+                  </li>
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="" style="color: white;" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      TIENDA
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="{% url 'tienda' %}">Bicicletas</a></li>
+                      <li><a class="dropdown-item" href="">Indumentaria</a></li>
+                    </ul>
+                  </li>
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="" style="color: white;" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      MANTENCIÓN
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="{% url 'mantencion' %}">Servicios</a></li>
+                      <li><a class="dropdown-item" href="">Taller</a></li>
+                    </ul>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" style="color: white;" href="">ARRIENDO</a>
+                  </li>
+
+                  {% if request.user.is_authenticated %}
                     <li class="nav-item dropdown">
                       <a class="nav-link dropdown-toggle" href="" style="color: white;" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        TIENDA
+                        BASE DE DATOS
                       </a>
                       <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{% url 'tienda' %}">Bicicletas</a></li>
-                        <li><a class="dropdown-item" href="">Indumentaria</a></li>
-                        <!-- <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li> -->
+                        <li><a class="dropdown-item" href="{% url 'crud-usuarios' %}">Usuarios</a></li>
+                        <li><a class="dropdown-item" href="{% url 'crud-arriendos' %}">Arriendos</a></li>
+                        <li><a class="dropdown-item" href="{% url 'crud-ventas' %}">Ventas</a></li>
+                        <li><a class="dropdown-item" href="{% url 'crud-reparaciones' %}">Reparaciones</a></li>
+                        <li><a class="dropdown-item" href="{% url 'crud-varios' %}">Varios</a></li>
+                        <li><a class="dropdown-item" href="{% url 'crud-productos' %}">Productos</a></li>
                       </ul>
                     </li>
-                    <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" style="color: white;" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        TALLER
-                      </a>
-                      <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="">Mantención</a></li>
-                        <li><a class="dropdown-item" href="">Reparación</a></li>
-                        <!-- <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li> -->
-                      </ul>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" style="color: white;" href="">ARRIENDO</a>
-                    </li>
-                  </ul>
-                  
-                </div>
+                  {% endif%}
+
+                </ul>
+                
               </div>
-            </nav>
-            <!-- fin nav bar -->
+            </div>
+          </nav>
+          <!-- fin nav bar -->
 
         </div>
     </div>
