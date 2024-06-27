@@ -2,6 +2,8 @@ from django.urls import path
 from MasterBikes import views
 
 urlpatterns = [
+    path("login", views.conectar, name="login"),
+    path("logout", views.desconectar, name="logout"),
     path('crud-varios', views.crud_varios, name='crud-varios'),
     path('crud-usuarios', views.crud_usuarios, name='crud-usuarios'),
     path('crud-arriendos', views.crud_arriendos, name='crud-arriendos'),

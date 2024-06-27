@@ -108,12 +108,12 @@ def add_tipoUsuario(request):
                 "mensaje":"Agregado con exito",
                 "form":form
             }
-            return render(request,"pages/agregar/add_tipoUser.html",context)
+            return render(request,"pages/agregar/varios/add_tipoUser.html",context)
     else:
         context = {
             "form":form
         }
-        return render(request,"pages/agregar/add_TipoUser.html",context)
+        return render(request,"pages/agregar/varios/add_TipoUser.html",context)
 
 def add_talla(request):
     form = TallaForm()
@@ -126,12 +126,12 @@ def add_talla(request):
                 "mensaje":"Agregado con exito",
                 "form":form
             }
-            return render(request,"pages/agregar/add_talla.html",context)
+            return render(request,"pages/agregar/varios/add_talla.html",context)
     else:
         context = {
             "form":form
         }
-        return render(request,"pages/agregar/add_talla.html",context)
+        return render(request,"pages/agregar/varios/add_talla.html",context)
 
 def add_bici(request):
     form = BiciForm()
@@ -144,12 +144,12 @@ def add_bici(request):
                 "mensaje":"Agregado con exito",
                 "form":form
             }
-            return render(request,"pages/agregar/add_TipoBici.html",context)
+            return render(request,"pages/agregar/varios/add_TipoBici.html",context)
     else:
         context = {
             "form":form
         }
-        return render(request,"pages/agregar/add_TipoBici.html",context)
+        return render(request,"pages/agregar/varios/add_TipoBici.html",context)
 
 def add_forma_pago(request):
     form = FormaPagoForm()
@@ -162,12 +162,12 @@ def add_forma_pago(request):
                 "mensaje":"Agregado con exito",
                 "form":form
             }
-            return render(request,"pages/agregar/add_formaPago.html",context)
+            return render(request,"pages/agregar/varios/add_formaPago.html",context)
     else:
         context = {
             "form":form
         }
-        return render(request,"pages/agregar/add_formaPago.html",context)
+        return render(request,"pages/agregar/varios/add_formaPago.html",context)
 
 def add_tipo_producto(request):
     form = TipoProductoForm()
@@ -180,12 +180,12 @@ def add_tipo_producto(request):
                 "mensaje":"Agregado con exito",
                 "form":form
             }
-            return render(request,"pages/agregar/add_tipoProducto.html",context)
+            return render(request,"pages/agregar/varios/add_tipoProducto.html",context)
     else:
         context = {
             "form":form
         }
-        return render(request,"pages/agregar/add_tipoProducto.html",context)
+        return render(request,"pages/agregar/varios/add_tipoProducto.html",context)
 
 def add_estado(request):
     form = EstadoForm()
@@ -198,13 +198,12 @@ def add_estado(request):
                 "mensaje":"Agregado con exito",
                 "form":form
             }
-            return render(request,"pages/agregar/add_estado.html",context)
+            return render(request,"pages/agregar/varios/add_estado.html",context)
     else:
         context = {
             "form":form
         }
-        return render(request,"pages/agregar/add_estado.html",context)
-
+        return render(request,"pages/agregar/varios/add_estado.html",context)
 
 """ def genero_del(request,pk):
     try:
@@ -281,3 +280,60 @@ def edit_tipoUser(request,pk):
         mensaje="id no existe"
         context={'mensaje': mensaje, 'tipoUsuarios': tipoUsuarios}
         return render(request, "pages/despliegue/crud_varios.html", context)
+    
+""" --------------------------------------------------------------------------- """
+def loginSession(request):
+    if request.method=="POST":
+        username = request.POST["username"]
+        password = request.POST["password"]
+        if username == "j.riquelmee" and password=="pass1234":
+            request.session["user"] = username
+            usuarios = Usuario.objects.all()
+            context = {
+                "usuarios":usuarios,
+            }
+            return render(request,"pages/despliegue/crud_usuarios.html",context)
+        else:
+            context ={
+                "mensaje":"Usuario o contraseña incorrecta",
+                "design" : "alert alert-danger w-50 mx-auto text-center",
+            }
+            return render(request,"pages/login.html",context)
+    else:
+        context = {
+        }
+        return render(request,"pages/login.html",context)
+
+def conectar(request):
+    if request.method=="POST":
+        #Corresponde al formulario
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(request,username=username,password=password)
+        if user is not None:
+            login(request,user)
+            usuarios = Usuario.objects.all()
+            context = {
+                "usuarios":usuarios,
+            }
+            return render(request,"pages/crud.html",context)
+        else:
+            context = {
+                "mensaje":"Usuario o contraseña incorrecta",
+                "design":"alert alert-danger w-50 mx-auto text-center",
+            }
+            return render(request,"pages/login.html",context)
+    else:
+        #Corresponde a redireccionar
+        context = {
+        }
+        return render(request,"pages/login.html",context)
+
+def desconectar(request):
+    #del request.session["user"]
+    logout(request)
+    context = {
+        "mensaje":"Sesion cerrada",
+        "design":"alert alert-info w-50 mx-auto text-center",
+    }
+    return render(request,"pages/login.html",context)
