@@ -55,3 +55,9 @@ class EstadoForm(ModelForm):
     class Meta:
         model = Estado
         fields = ['tipo']
+
+
+
+
+
+        

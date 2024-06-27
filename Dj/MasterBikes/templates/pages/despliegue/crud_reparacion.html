@@ -37,12 +37,8 @@
                                         
                                         {% if usuarios %}
                                             {% for user in usuarios %}
-                                                {% if detalle %}
-                                                    {% for det in detalle %}
-                                                        {% if tmp.rut.rut == det.rut and user.username == det.username.username %}
-                                                            <td>{{user.username}}</td>
-                                                        {% endif %}
-                                                    {% endfor%}
+                                                {% if tmp.rut.rut == user.rut %}
+                                                    <td>{{user.user.username}}</td>
                                                 {% endif %}
                                             {% endfor%}
                                         {% endif %}

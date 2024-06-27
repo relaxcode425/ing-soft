@@ -13,12 +13,10 @@ def imagen(request,nm):
 """ --------------------------------------------------------------------------- """
 @login_required
 def crud_usuarios(request):
-    usuarios = User.objects.all()
-    detalle = Usuario.objects.all()
+    usuarios = Usuario.objects.all()
     tipoUsuarios = TipoUsuario.objects.all()
     context={
         "usuarios" : usuarios,
-        "detalle" : detalle,
         "tipoUsuarios": tipoUsuarios,
     }
     return render(request, 'pages/despliegue/crud_usuarios.html', context)
@@ -51,13 +49,11 @@ def crud_arriendos(request):
 @login_required
 def crud_reparacion(request):
     reparaciones = Reparacion.objects.all()
-    usuarios = User.objects.all()
-    detalle = Usuario.objects.all()
+    usuarios = Usuario.objects.all()
     estado = Estado.objects.all()
     context={
         "reparaciones" : reparaciones,
         "usuarios" : usuarios,
-        "detalle" : detalle,
         "estado" : estado,
     }
     return render(request, 'pages/despliegue/crud_reparacion.html', context)
@@ -326,11 +322,14 @@ def loginSession(request):
 def conectar(request):
     if request.method=="POST":
         #Corresponde al formulario
-        username = request.POST["username"]
-        password = request.POST["password"]
+        username = request.POST["usuario"]
+        password = request.POST["pass"]
         user = authenticate(request,username=username,password=password)
         if user is not None:
             login(request,user)
+
+            us = Usuario.objects.get(user=user)
+            request.session["tipo"] = us.tipo
             usuarios = Usuario.objects.all()
             context = {
                 "usuarios":usuarios,
@@ -350,7 +349,8 @@ def conectar(request):
 
 def desconectar(request):
     #del request.session["user"]
-    logout(request)
+    if request.user.is_authenticated:
+        logout(request)
     context = {
         "mensaje":"Sesion cerrada",
         "design":"alert alert-info w-50 mx-auto text-center",

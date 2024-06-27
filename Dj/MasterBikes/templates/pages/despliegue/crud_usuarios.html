@@ -34,55 +34,35 @@
                             <th>Eliminar</th>
                         </thead>
                         <tbody>
-                            <!-- {% if usuarios %}
+                            {% if usuarios and tipoUsuarios %}
                                 {% for tmp in usuarios %}
-                                    {% for det in detalle %}
-                                        {% if tmp.username == det.username.username %}
-                                            <h3>{{tmp.username}}</h3>
-                                            <h3>{{det.rut}}</h3>
-                                            {% for tipo in tipoUsuarios %}
-                                                {% if tipo.id_tipo_usuario == det.id_tipo_usuario.id_tipo_usuario %}
-                                                    <h3>{{tipo.tipo}}</h3>
-                                                {% endif %}
-                                            {% endfor%}
+                                    <tr>
+                                        <td>{{tmp.user.username}}</td>
+                                        <td>{{tmp.rut}}</td>
+
+                                        {% if tmp.user.first_name == null or tmp.user.first_name == blank or tmp.user.first_name == "" %}
+                                            <td>vacío</td>
+                                        {% else %}
+                                            <td>{{tmp.user.first_name}}</td>
                                         {% endif %}
-                                    {% endfor%}
-                                {% endfor%}
-                            {% endif %} -->
 
-                            {% if usuarios and detalle and tipoUsuarios %}
-                                {% for tmp in usuarios %}
-                                    {% for det in detalle %}
-                                        {% if det.username.username == tmp.username %}
-                                            <tr>
-                                                <td>{{tmp.username}}</td>
-                                                <td>{{det.rut}}</td>
-
-                                                {% if tmp.first_name == null or tmp.first_name == blank or tmp.first_name == "" %}
-                                                    <td>vacío</td>
-                                                {% else %}
-                                                    <td>{{tmp.first_name}}</td>
-                                                {% endif %}
-
-                                                {% if tmp.last_name == null or tmp.last_name == blank or tmp.last_name == "" %}
-                                                    <td>vacío</td>
-                                                {% else %}
-                                                    <td>{{tmp.last_name}}</td>
-                                                {% endif %}
-
-                                                {% for tipo in tipoUsuarios %}
-                                                    {% if tipo.id_tipo_usuario == det.id_tipo_usuario.id_tipo_usuario %}
-                                                        <td>{{tipo.tipo}}</td>
-                                                    {% endif %}
-                                                {% endfor %}
-
-                                                <td><a href=""><button
-                                                    class="btn btn-warning">Modificar</button></a></td>
-                                                <td><a href=""><button
-                                                    class="btn btn-danger">Eliminar</button></a></td>
-                                            </tr>
+                                        {% if tmp.user.last_name == null or tmp.user.last_name == blank or tmp.user.last_name == "" %}
+                                            <td>vacío</td>
+                                        {% else %}
+                                            <td>{{tmp.user.last_name}}</td>
                                         {% endif %}
-                                    {% endfor%}
+
+                                        {% for tipo in tipoUsuarios %}
+                                            {% if tipo.id_tipo_usuario == tmp.id_tipo_usuario.id_tipo_usuario %}
+                                                <td>{{tipo.tipo}}</td>
+                                            {% endif %}
+                                        {% endfor %}
+
+                                        <td><a href=""><button
+                                            class="btn btn-warning">Modificar</button></a></td>
+                                        <td><a href=""><button
+                                            class="btn btn-danger">Eliminar</button></a></td>
+                                    </tr>
                                 {% endfor%}
                             {% endif %}
                         </tbody>
@@ -97,7 +77,7 @@
                     </a>
                     <a href="{% url 'crud-varios' %}">
                         <button class="btn btn-info">
-                            Ver Tipo de Usuarios
+                            Ver Tipos de Usuario
                         </button>
                     </a>
                 </div>
