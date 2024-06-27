@@ -2,15 +2,22 @@ from django.urls import path
 from MasterBikes import views
 
 urlpatterns = [
+
     path("login", views.conectar, name="login"),
     path("logout", views.desconectar, name="logout"),
+
+    path('', views.Principal, name='Principal'),
+    path('arriendo', views.arriendo, name='arriendo'),
+    path('mantencion',views.Mantencion, name='mantencion'),
+    path('nosotros',views.Nosotros, name='nosotros'),
+    path('registro',views.Registro, name='registro'),
+    path('tienda',views.Tienda, name='tienda'),
+
     path('crud-varios', views.crud_varios, name='crud-varios'),
     path('crud-usuarios', views.crud_usuarios, name='crud-usuarios'),
     path('crud-arriendos', views.crud_arriendos, name='crud-arriendos'),
     path('crud-reparaciones', views.crud_reparacion, name='crud-reparaciones'),
     path('crud-ventas', views.crud_ventas, name='crud-ventas'),
-    path('', views.Principal, name='Principal'),
-    path('tienda', views.tienda, name='tienda'),
     path('add-tipo-usuario', views.add_tipoUsuario, name='add-tipo-usuario'),
     path('edit-tipo-usuario/<str:pk>', views.edit_tipoUser, name='edit-tipo-usuario'),
     path('add-talla', views.add_talla, name='add-talla'),

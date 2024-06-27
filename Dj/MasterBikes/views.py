@@ -91,10 +91,25 @@ def Principal(request):
     context={}
     return render(request, 'pages/Principal.html', context)
 
-def tienda(request):
+def arriendo(request):
     context={}
-    return render(request, 'pages/tienda.html', context)
+    return render(request, 'pages/Arriendo.html', context)
 
+def Mantencion(request):
+    context={}
+    return render(request, 'pages/Mantencion.html', context)
+
+def Nosotros(request):
+    context={}
+    return render(request, 'pages/Nosotros.html', context)
+
+def Registro(request):
+    context={}
+    return render(request, 'pages/Registro.html', context)
+
+def Tienda(request):
+    context={}
+    return render(request, 'pages/Tienda.html', context)
 """ --------------------------------------------------------------------------- """
 
 def add_tipoUsuario(request):
