@@ -153,7 +153,7 @@ class Detalle(models.Model):
     )
     cantidad = models.IntegerField()
     subtotal = models.IntegerField()
-
+    
 class Despacho(models.Model):
     id_despacho = models.AutoField(primary_key=True, db_column="idDespacho")
     id_pago = models.ForeignKey(

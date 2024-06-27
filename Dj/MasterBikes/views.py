@@ -32,14 +32,12 @@ def crud_productos(request):
 @login_required
 def crud_arriendos(request):
     arriendos = Arriendo.objects.all()
-    usuarios = User.objects.all()
-    detalle = Usuario.objects.all()
+    usuarios = Usuario.objects.all()
     talla = Talla.objects.all()
     formaPago = FormaPago.objects.all()
     tipoBici = TipoBici.objects.all()
     context={
         "usuarios" : usuarios,
-        "detalle" : detalle,
         "arriendos" : arriendos,
         "talla" : talla,
         "formaPago" : formaPago,
@@ -60,8 +58,7 @@ def crud_reparacion(request):
 @login_required
 def crud_ventas(request):
     pagos = Pago.objects.all()
-    usuarios = User.objects.all()
-    detalle = Usuario.objects.all()
+    usuarios = Usuario.objects.all()
     formaPago = FormaPago.objects.all()
     detallePago = Detalle.objects.all()
     productos = Producto.objects.all()
@@ -69,7 +66,6 @@ def crud_ventas(request):
     context={
         "pagos" : pagos,
         "usuarios" : usuarios,
-        "detalle" : detalle,
         "formaPago" : formaPago,
         "detallePago" : detallePago,
         "productos" : productos,
