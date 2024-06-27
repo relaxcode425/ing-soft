@@ -55,8 +55,3 @@ class EstadoForm(ModelForm):
     class Meta:
         model = Estado
         fields = ['tipo']
-
-class ReparacionForm(ModelForm):
-    class Meta:
-        model = Reparacion
-        fields = "__all__"

@@ -7,7 +7,9 @@ from django.contrib.auth.models import User
 from .forms import TipoUsuarioForm, TallaForm,BiciForm,FormaPagoForm,TipoProductoForm,EstadoForm
 
 # Create your views here.
-
+""" --------------------------------------------------------------------------- """
+def imagen(request,nm):
+    return
 """ --------------------------------------------------------------------------- """
 def crud_usuarios(request):
     usuarios = User.objects.all()
@@ -19,6 +21,15 @@ def crud_usuarios(request):
         "tipoUsuarios": tipoUsuarios,
     }
     return render(request, 'pages/despliegue/crud_usuarios.html', context)
+
+def crud_productos(request):
+    productos = Producto.objects.all()
+    tipoProductos = TipoProducto.objects.all()
+    context={
+        "productos" : productos,
+        "tipoProductos" : tipoProductos,
+    }
+    return render(request, 'pages/despliegue/crud_productos.html', context)
 
 def crud_arriendos(request):
     arriendos = Arriendo.objects.all()
@@ -220,52 +231,44 @@ def add_estado(request):
         }
         return render(request,"pages/agregar/varios/add_estado.html",context)
 
-""" def genero_del(request,pk):
+def del_tipoUser(request,pk):
     try:
-        genero = Genero.objects.get(id_genero=pk)
-        genero.delete()
+        tipoUsuarios = TipoUsuario.objects.get(id_tipo_usuario=pk)
+        tipoUsuarios.delete()
 
-        generos = Genero.objects.all()
+        tipoUsuarios = TipoUsuario.objects.all()
+        talla = Talla.objects.all()
+        tipoBici = TipoBici.objects.all()
+        formaPago = FormaPago.objects.all()
+        tipoProducto = TipoProducto.objects.all()
+        estado = Estado.objects.all()
         context={
             "mensaje":"Registro eliminado exitosamente",
-            "generos":generos
+            "tipoUsuarios": tipoUsuarios,
+            "talla" : talla,
+            "tipoBici" : tipoBici,
+            "formaPago" : formaPago,
+            "tipoProducto" : tipoProducto,
+            "estado" : estado,
         }
-        return render(request,"pages/crud_genero.html",context)
+        return render(request,"pages/despliegue/crud_varios.html",context)
     except:
-        generos = Genero.objects.all()
+        tipoUsuarios = TipoUsuario.objects.all()
+        talla = Talla.objects.all()
+        tipoBici = TipoBici.objects.all()
+        formaPago = FormaPago.objects.all()
+        tipoProducto = TipoProducto.objects.all()
+        estado = Estado.objects.all()
         context={
-            "mensaje":"Error, Genero no encontrado...",
-            "generos":generos
+            "mensaje":"Error, Datos no encontrados",
+            "tipoUsuarios": tipoUsuarios,
+            "talla" : talla,
+            "tipoBici" : tipoBici,
+            "formaPago" : formaPago,
+            "tipoProducto" : tipoProducto,
+            "estado" : estado,
         }
-        return render(request,"pages/crud_genero.html",context)
-
-def genero_edit(request,pk):
-    if pk!="":
-        genero = Genero.objects.get(id_genero=pk)
-        form = GeneroForm(instance=genero)
-        if request.method=="POST":
-            nuevo = GeneroForm(request.POST,instance=genero)
-
-            if nuevo.is_valid():
-                nuevo.save()
-
-                context ={
-                    "mensaje":"Modificado con exito",
-                    "form":nuevo
-                }
-                return render(request,"pages/genero_edit.html",context)
-        else:
-            context={
-                "form":form,
-            }
-            return render(request,"pages/genero_edit.html",context)
-    else:
-        generos = Genero.objects.all()
-        context={
-            "mensaje":"Error, genero no encontrado",
-            "generos":generos
-        }
-        return render(request,"pages/crud_genero.html",context) """
+        return render(request,"pages/despliegue/crud_varios.html",context)
 
 def edit_tipoUser(request,pk):
 
