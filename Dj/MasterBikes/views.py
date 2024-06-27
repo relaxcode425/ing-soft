@@ -1,9 +1,10 @@
 from django.shortcuts import render
+from django.http import HttpResponseRedirect
 from .models import TipoUsuario, Talla, TipoBici, FormaPago, TipoProducto,Estado,Usuario,Arriendo,Reparacion, Pago, Detalle, Despacho, Producto
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from .forms import TipoUsuarioForm, TallaForm
+from .forms import TipoUsuarioForm, TallaForm,BiciForm,FormaPagoForm,TipoProductoForm,EstadoForm
 
 # Create your views here.
 
@@ -130,7 +131,80 @@ def add_talla(request):
         context = {
             "form":form
         }
-        return render(request,"pages/agregar/add_Talla.html",context)
+        return render(request,"pages/agregar/add_talla.html",context)
+
+def add_bici(request):
+    form = BiciForm()
+    if request.method=="POST":
+        nuevo = BiciForm(request.POST)
+        if nuevo.is_valid():
+            nuevo.save()
+
+            context={
+                "mensaje":"Agregado con exito",
+                "form":form
+            }
+            return render(request,"pages/agregar/add_TipoBici.html",context)
+    else:
+        context = {
+            "form":form
+        }
+        return render(request,"pages/agregar/add_TipoBici.html",context)
+
+def add_forma_pago(request):
+    form = FormaPagoForm()
+    if request.method=="POST":
+        nuevo = FormaPagoForm(request.POST)
+        if nuevo.is_valid():
+            nuevo.save()
+
+            context={
+                "mensaje":"Agregado con exito",
+                "form":form
+            }
+            return render(request,"pages/agregar/add_formaPago.html",context)
+    else:
+        context = {
+            "form":form
+        }
+        return render(request,"pages/agregar/add_formaPago.html",context)
+
+def add_tipo_producto(request):
+    form = TipoProductoForm()
+    if request.method=="POST":
+        nuevo = TipoProductoForm(request.POST)
+        if nuevo.is_valid():
+            nuevo.save()
+
+            context={
+                "mensaje":"Agregado con exito",
+                "form":form
+            }
+            return render(request,"pages/agregar/add_tipoProducto.html",context)
+    else:
+        context = {
+            "form":form
+        }
+        return render(request,"pages/agregar/add_tipoProducto.html",context)
+
+def add_estado(request):
+    form = EstadoForm()
+    if request.method=="POST":
+        nuevo = EstadoForm(request.POST)
+        if nuevo.is_valid():
+            nuevo.save()
+
+            context={
+                "mensaje":"Agregado con exito",
+                "form":form
+            }
+            return render(request,"pages/agregar/add_estado.html",context)
+    else:
+        context = {
+            "form":form
+        }
+        return render(request,"pages/agregar/add_estado.html",context)
+
 
 """ def genero_del(request,pk):
     try:
@@ -193,17 +267,17 @@ def edit_tipoUser(request,pk):
                 mensaje="Se actualizó el tipo de usuario"
                 print(mensaje)
                 context={'tipoUsuarios':tipoUsuarios, 'form': form, 'mensaje': mensaje}
-                return render (request, 'pages/editar/edit_tipoUser.html', context)
-        else:
-            #no es POST
-            print("No es POST")
-            form = TipoUsuarioForm(instance=tipoUsuarios)
-            mensaje=""
-            context={'tipoUsuarios':tipoUsuarios, 'form': form, 'mensaje': mensaje}
-            return render (request, 'pages/editar/edit_tipoUser.html', context)
+                return render(request, "pages/editar/edit_tipoUser.html", context)
+            else:
+                #no es POST
+                print("No es POST")
+                form = TipoUsuarioForm(instance=tipoUsuarios)
+                mensaje=""
+                context={'tipoUsuarios':tipoUsuarios, 'form': form, 'mensaje': mensaje}
+                return render(request, "pages/editar/edit_tipoUser.html", context)
     except:
         print("Error, id no existe")
         tipoUsuarios = TipoUsuario.objects.all()
         mensaje="id no existe"
         context={'mensaje': mensaje, 'tipoUsuarios': tipoUsuarios}
-        return render (request, 'pages/despliegue/crud_usuarios.html', context)
+        return render(request, "pages/despliegue/crud_varios.html", context)

@@ -18,9 +18,9 @@
             <div class="row">
                 <div class="col-md-8 shadow-lg mx-auto text-center p-3">
 
-                    <h4>Formulario para Tipo de Usuario:</h4>
+                    <h4>Formulario para Tipos de Bicicleta:</h4>
                     <br><br>
-                    <form action="" method="POST">
+                    <form action="{% url 'add-bici' %}" method="POST">
                         {% csrf_token %}
                         <div>
                             {{form.as_p}}
@@ -32,7 +32,7 @@
                         </div>
                         {% endif%}
                         <div class="mt-3">
-                            <button type="submit" class="btn btn-success">Modificar</button>
+                            <button type="submit" class="btn btn-success">Agregar</button>
                             <a href="{% url 'crud-varios' %}">
                                 <button type="button" class="btn btn-secondary">Volver</button>
                             </a>

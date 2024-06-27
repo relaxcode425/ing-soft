@@ -23,3 +23,35 @@ class TallaForm(ModelForm):
     class Meta:
         model = Talla
         fields = ['talla']
+
+class BiciForm(ModelForm):
+    tipo = forms.CharField(max_length=20,
+                               required=True)
+    
+    class Meta:
+        model = TipoBici
+        fields = ['tipo']
+
+class FormaPagoForm(ModelForm):
+    forma = forms.CharField(max_length=20,
+                               required=True)
+    
+    class Meta:
+        model = FormaPago
+        fields = ['forma']
+
+class TipoProductoForm(ModelForm):
+    tipo = forms.CharField(max_length=20,
+                               required=True)
+    
+    class Meta:
+        model = TipoProducto
+        fields = ['tipo']
+
+class EstadoForm(ModelForm):
+    tipo = forms.CharField(max_length=20,
+                               required=True)
+    
+    class Meta:
+        model = Estado
+        fields = ['tipo']

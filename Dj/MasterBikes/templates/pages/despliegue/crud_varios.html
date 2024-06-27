@@ -39,7 +39,7 @@
                                         <td>{{tmp.id_tipo_usuario}}</td>
                                         <td>{{tmp.tipo}}</td>
                                         <td>{{tmp.descripcion}}</td>
-                                        <td><a href=""> <!-- url 'user_findEdit' pk=tmp.rut -->
+                                        <td><a href="{% url 'edit-tipo-usuario' pk=tmp.id_tipo_usuario %}"> <!-- url 'user_findEdit' pk=tmp.rut -->
                                             <button class="btn btn-warning">Modificar</button>
                                         </a></td>
                                         <td><a href=""> <!-- url 'user_del' pk=tmp.rut -->
@@ -95,7 +95,7 @@
                             {{mensaje}}
                         </div>
                     {% endif%}
-                    <a href="">
+                    <a href="{% url 'add-talla' %}">
                         <button class="btn btn-primary">Agregar Registro</button>
                     </a>
                 </div>
@@ -135,7 +135,7 @@
                             {{mensaje}}
                         </div>
                     {% endif%}
-                    <a href="">
+                    <a href="{% url 'add-bici' %}">
                         <button class="btn btn-primary">Agregar Registro</button>
                     </a>
                 </div>
@@ -175,7 +175,7 @@
                             {{mensaje}}
                         </div>
                     {% endif%}
-                    <a href="">
+                    <a href="{% url 'add-forma-pago' %}">
                         <button class="btn btn-primary">Agregar Registro</button>
                     </a>
                 </div>
@@ -215,7 +215,7 @@
                             {{mensaje}}
                         </div>
                     {% endif%}
-                    <a href="">
+                    <a href="{% url 'add-tipo-producto' %}">
                         <button class="btn btn-primary">Agregar Registro</button>
                     </a>
                 </div>
@@ -255,7 +255,7 @@
                             {{mensaje}}
                         </div>
                     {% endif%}
-                    <a href="">
+                    <a href="{% url 'add-estado' %}">
                         <button class="btn btn-primary">Agregar Registro</button>
                     </a>
                 </div>
