@@ -69,13 +69,13 @@ TEMPLATES = [
 ]
 
 # LOGIN_URL
-# LOGIN_URL = "login"
+LOGIN_URL = "login"
 
 # LOGIN_REDIRECT_URL
-# LOGIN_REDIRECT_URL = "crud"
+LOGIN_REDIRECT_URL = "login"
 
 # LOGOUT_REDIRECT_URL
-# LOGOUT_REDIRECT_URL = "logout"
+LOGOUT_REDIRECT_URL = "logout"
 
 WSGI_APPLICATION = "Dj.wsgi.application"
 

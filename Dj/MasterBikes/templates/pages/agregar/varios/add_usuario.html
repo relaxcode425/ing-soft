@@ -15,7 +15,33 @@
     {% include 'base/header.html'%}
     <br><br>
     <main>
-        
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 shadow-lg mx-auto text-center p-3">
+
+                    <h4>Formulario para Usuario:</h4>
+                    <br><br>
+                    <form action="{% url 'add-usuario' %}" method="POST">
+                        {% csrf_token %}
+                        <div>
+                            {{form.as_p}}
+                        </div>
+                        <br>
+                        {% if mensaje%}
+                            <div class="alert alert-success w-50 mx-auto text-center">
+                                {{mensaje}}
+                            </div>
+                        {% endif%}
+                        <div class="mt-3">
+                            <button type="submit" class="btn btn-success">Agregar</button>
+                            <a href="{% url 'crud-usuarios' %}">
+                                <button type="button" class="btn btn-secondary">Volver</button>
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </main>
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 </body>

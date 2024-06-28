@@ -5,6 +5,7 @@ urlpatterns = [
 
     path('login', views.conectar, name='login'),
     path('logout', views.desconectar, name='logout'),
+    path('registrar', views.registrar, name='registrar'),
 
     path('', views.Principal, name='Principal'),
     path('arriendo', views.arriendo, name='arriendo'),
@@ -20,9 +21,11 @@ urlpatterns = [
     path('crud-reparaciones', views.crud_reparacion, name='crud-reparaciones'),
     path('crud-ventas', views.crud_ventas, name='crud-ventas'),
     path('add-tipo-usuario', views.add_tipoUsuario, name='add-tipo-usuario'),
+    path('add-usuario', views.add_usuario, name='add-usuario'),
     path('edit-tipo-usuario/<str:pk>', views.edit_tipoUser, name='edit-tipo-usuario'),
     path('del-tipo-usuario/<str:pk>', views.del_tipoUser, name='del-tipo-usuario'),
     path('add-talla', views.add_talla, name='add-talla'),
+    path('del-talla/<str:pk>', views.del_talla, name='del-talla'),
     path('add-bici', views.add_bici, name='add-bici'),
     path('add-forma-pago', views.add_forma_pago, name='add-forma-pago'),
     path('add-tipo-producto', views.add_tipo_producto, name='add-tipo-producto'),

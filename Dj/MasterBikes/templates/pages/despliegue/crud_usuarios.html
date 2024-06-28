@@ -34,7 +34,7 @@
                             <th>Eliminar</th>
                         </thead>
                         <tbody>
-                            {% if usuarios and tipoUsuarios %}
+                            {% if usuarios %}
                                 {% for tmp in usuarios %}
                                     <tr>
                                         <td>{{tmp.user.username}}</td>
@@ -51,12 +51,18 @@
                                         {% else %}
                                             <td>{{tmp.user.last_name}}</td>
                                         {% endif %}
-
-                                        {% for tipo in tipoUsuarios %}
-                                            {% if tipo.id_tipo_usuario == tmp.id_tipo_usuario.id_tipo_usuario %}
-                                                <td>{{tipo.tipo}}</td>
-                                            {% endif %}
-                                        {% endfor %}
+                                        
+                                        {% if tipoUsuarios %}
+                                            {% for tipo in tipoUsuarios %}
+                                                {% if tipo.id_tipo_usuario == tmp.id_tipo_usuario.id_tipo_usuario %}
+                                                    {% if tipo.tipo == null or tipo.tipo == blank %}
+                                                        <td>Sin</td>
+                                                    {% else %}
+                                                        <td>{{tipo.tipo}}</td>
+                                                    {% endif %}
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
 
                                         <td><a href=""><button
                                             class="btn btn-warning">Modificar</button></a></td>
@@ -72,7 +78,7 @@
                             {{mensaje}}
                         </div>
                     {% endif%}
-                    <a href="">
+                    <a href="{% url 'add-usuario' %}">
                         <button class="btn btn-primary">Agregar Registro</button>
                     </a>
                     <a href="{% url 'crud-varios' %}">

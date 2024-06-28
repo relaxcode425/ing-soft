@@ -1,10 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpResponseRedirect
-from .models import TipoUsuario, Talla, TipoBici, FormaPago, TipoProducto,Estado,Usuario,Arriendo,Reparacion, Pago, Detalle, Despacho, Producto
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from .forms import TipoUsuarioForm, TallaForm,BiciForm,FormaPagoForm,TipoProductoForm,EstadoForm
+from .forms import TipoUsuarioForm, TallaForm, BiciForm, FormaPagoForm, TipoProductoForm, EstadoForm, UsuarioForm
+from .models import TipoUsuario, Talla, TipoBici, FormaPago, TipoProducto, Estado, Usuario, Arriendo, Reparacion, Pago, Detalle, Despacho, Producto
 
 # Create your views here.
 """ --------------------------------------------------------------------------- """
@@ -94,11 +94,11 @@ def crud_varios(request):
 def Principal(request):
     context={}
     return render(request, 'pages/Principal.html', context)
-
+@login_required
 def arriendo(request):
     context={}
     return render(request, 'pages/Arriendo.html', context)
-
+@login_required
 def Mantencion(request):
     context={}
     return render(request, 'pages/Mantencion.html', context)
@@ -111,6 +111,37 @@ def Registro(request):
     context={}
     return render(request, 'pages/Registro.html', context)
 
+def registrar(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        rut = request.POST.get('rut')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        id_tipo_usuario = TipoUsuario.objects.get(tipo='Cliente')
+
+        # Validar y guardar los datos en la base de datos
+        if username and rut and first_name and last_name and email and password and id_tipo_usuario:
+            user = User(
+                username=username,
+                first_name=first_name,
+                last_name=last_name,
+                email=email,
+            )
+            user.set_password(password)  # Set the password using set_password
+            user.save()  # Save the user instance
+
+            usuario = Usuario(
+                rut=rut,
+                id_tipo_usuario=id_tipo_usuario,
+                user=user  # Associate the Usuario with the User
+            )
+            usuario.save()  # Save the usuario instance
+
+            return redirect('Principal')
+    else:
+        return render(request, 'registro.html')
 def Tienda(request):
     context={}
     return render(request, 'pages/Tienda.html', context)
@@ -134,6 +165,45 @@ def add_tipoUsuario(request):
         }
         return render(request,"pages/agregar/varios/add_TipoUser.html",context)
 @login_required
+def del_tipoUsuario(request, pk):
+    try:
+        tipoUsuario = TipoUsuario.objects.get(id_tipo_usuario=pk)
+        tipoUsuario.delete()
+
+        tipoUsuarios = TipoUsuario.objects.all()
+        talla = Talla.objects.all()
+        tipoBici = TipoBici.objects.all()
+        formaPago = FormaPago.objects.all()
+        tipoProducto = TipoProducto.objects.all()
+        estado = Estado.objects.all()
+        context = {
+            "tipoUsuarios": tipoUsuarios,
+            "talla" : talla,
+            "tipoBici" : tipoBici,
+            "formaPago" : formaPago,
+            "tipoProducto" : tipoProducto,
+            "estado" : estado,
+            "mensaje": "Registro Eliminado",
+        }
+        return render(request, "pages/crud-varios.html", context)
+    except:
+        tipoUsuarios = TipoUsuario.objects.all()
+        talla = Talla.objects.all()
+        tipoBici = TipoBici.objects.all()
+        formaPago = FormaPago.objects.all()
+        tipoProducto = TipoProducto.objects.all()
+        estado = Estado.objects.all()
+        context = {
+            "tipoUsuarios": tipoUsuarios,
+            "talla" : talla,
+            "tipoBici" : tipoBici,
+            "formaPago" : formaPago,
+            "tipoProducto" : tipoProducto,
+            "estado" : estado,
+            "mensaje": "Error,Tipo de usuario no encontrado...",
+        }
+        return render(request, "pages/crud-varios.html", context)
+@login_required
 def add_talla(request):
     form = TallaForm()
     if request.method=="POST":
@@ -151,6 +221,45 @@ def add_talla(request):
             "form":form
         }
         return render(request,"pages/agregar/varios/add_talla.html",context)
+def del_talla(request, pk):
+    try:
+        talla = Talla.objects.get(id_talla=pk)
+        talla.delete()
+
+        tipoUsuarios = TipoUsuario.objects.all()
+        talla = Talla.objects.all()
+        tipoBici = TipoBici.objects.all()
+        formaPago = FormaPago.objects.all()
+        tipoProducto = TipoProducto.objects.all()
+        estado = Estado.objects.all()
+        context = {
+            "tipoUsuarios": tipoUsuarios,
+            "talla" : talla,
+            "tipoBici" : tipoBici,
+            "formaPago" : formaPago,
+            "tipoProducto" : tipoProducto,
+            "estado" : estado,
+            "mensaje": "Registro Eliminado",
+        }
+        return render(request, "pages/despliegue/crud_varios.html", context)
+    except:
+        tipoUsuarios = TipoUsuario.objects.all()
+        talla = Talla.objects.all()
+        tipoBici = TipoBici.objects.all()
+        formaPago = FormaPago.objects.all()
+        tipoProducto = TipoProducto.objects.all()
+        estado = Estado.objects.all()
+        context = {
+            "tipoUsuarios": tipoUsuarios,
+            "talla" : talla,
+            "tipoBici" : tipoBici,
+            "formaPago" : formaPago,
+            "tipoProducto" : tipoProducto,
+            "estado" : estado,
+            "mensaje": "Error,Talla no encontrada...",
+        }
+        return render(request, "pages/despliegue/crud_varios.html", context)
+    
 @login_required
 def add_bici(request):
     form = BiciForm()
@@ -224,6 +333,27 @@ def add_estado(request):
         }
         return render(request,"pages/agregar/varios/add_estado.html",context)
 @login_required
+def add_usuario(request):
+    form = UsuarioForm()
+    if request.method == "POST":
+        nuevo = UsuarioForm(request.POST)
+        if nuevo.is_valid():
+            usuario_data = nuevo.cleaned_data
+            user = User.objects.create_user(
+                username=usuario_data["username"],
+                password=usuario_data["password"],
+            )
+            usuario = Usuario(
+                user=user,
+                rut=usuario_data["rut"],
+                id_tipo_usuario=usuario_data["id_tipo_usuario"],
+            )
+            usuario.save()
+            return redirect("Principal")  # redirect to a success page
+    context = {
+        "form": form
+    }
+    return render(request, "pages/agregar/varios/add_usuario.html", context)
 def del_tipoUser(request,pk):
     try:
         tipoUsuarios = TipoUsuario.objects.get(id_tipo_usuario=pk)
