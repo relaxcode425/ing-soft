@@ -426,7 +426,8 @@ def loginSession(request):
     if request.method=="POST":
         username = request.POST["username"]
         password = request.POST["password"]
-        if username == "j.riquelmee" and password=="pass1234":
+        user = authenticate(request,username=username,password=password)
+        if user is not None:
             request.session["user"] = username
             usuarios = Usuario.objects.all()
             context = {
@@ -453,13 +454,13 @@ def conectar(request):
         if user is not None:
             login(request,user)
 
-            us = Usuario.objects.get(user=user)
-            request.session["tipo"] = us.tipo
-            usuarios = Usuario.objects.all()
+            """us = Usuario.objects.get(user=user)
+            request.session["tipo"] = us.tipo"""
+            
             context = {
-                "usuarios":usuarios,
+                
             }
-            return render(request,"pages/crud.html",context)
+            return render(request,"pages/Principal.html",context)
         else:
             context = {
                 "mensaje":"Usuario o contraseña incorrecta",
