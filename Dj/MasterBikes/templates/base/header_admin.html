@@ -24,7 +24,7 @@
               </a>
             {% else %}
               <div class="icon-container1">
-                <a href=""><i id="login" class="fa-solid fa-user icon"></i></a>
+                <a href="{% url 'login' %}"><i id="login" class="fa-solid fa-user icon"></i></a>
               </div>
             {% endif%}
           </div>
@@ -60,7 +60,7 @@
                     </a>
                     <ul class="dropdown-menu">
                       <li><a class="dropdown-item" href="{% url 'tienda' %}">Bicicletas</a></li>
-                      <li><a class="dropdown-item" href="">Indumentaria</a></li>
+                      <li><a class="dropdown-item" href="{% url 'tienda' %}">Indumentaria</a></li>
                     </ul>
                   </li>
                   <li class="nav-item dropdown">
@@ -69,11 +69,11 @@
                     </a>
                     <ul class="dropdown-menu">
                       <li><a class="dropdown-item" href="{% url 'mantencion' %}">Servicios</a></li>
-                      <li><a class="dropdown-item" href="">Taller</a></li>
+                      <li><a class="dropdown-item" href="{% url 'mantencion' %}">Taller</a></li>
                     </ul>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" style="color: white;" href="">ARRIENDO</a>
+                    <a class="nav-link active" aria-current="page" style="color: white;" href="{% url 'arriendo' %}">ARRIENDO</a>
                   </li>
                   <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="" style="color: white;" role="button" data-bs-toggle="dropdown" aria-expanded="false">

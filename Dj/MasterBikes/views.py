@@ -138,6 +138,7 @@ def registrar(request):
                 user=user  # Associate the Usuario with the User
             )
             usuario.save()  # Save the usuario instance
+            login(request,user)
 
             return redirect('Principal')
     else:
@@ -454,8 +455,8 @@ def conectar(request):
         if user is not None:
             login(request,user)
 
-            """us = Usuario.objects.get(user=user)
-            request.session["tipo"] = us.tipo"""
+            us = Usuario.objects.get(user=user)
+            request.session["tipo"] = us.id_tipo_usuario.tipo
             
             context = {
                 
