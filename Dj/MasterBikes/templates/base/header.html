@@ -3,20 +3,21 @@
     <div class="container-fluid">
         <div class="row">
 
-            <!-- icono izquierda -->
-            <div class="col-4">
-                <a href="{% url 'Principal' %}"><img class="d-block mx-auto" src="{% static 'img/image.png.png' %}" width="30%" alt=""></a>
-            </div>
-            <!-- fin icono izquierda -->
+          <!-- icono izquierda -->
+          <div class="col-4">
+              <a href="{% url 'Principal' %}"><img class="d-block mx-auto" src="{% static 'img/image.png.png' %}" width="30%" alt=""></a>
+          </div>
+          <!-- fin icono izquierda -->
 
-            <!-- barra de busqueda -->
-            <div class="col-4">
-              <form class="d-flex mt-1" role="search">
-                <input class="form-control me-2" type="search" placeholder="¿Qué estás buscando?" aria-label="Search">
-                <button class="btn btn-dark" type="submit">Buscar</button>
-              </form>
-            </div>
-            <!-- fin barra de busqueda -->
+          <!-- barra de busqueda -->
+          <div class="col-4">
+            <form class="d-flex mt-1" role="search">
+              <input class="form-control me-2" type="search" placeholder="¿Qué estás buscando?" aria-label="Search">
+              <button class="btn btn-dark" type="submit">Buscar</button>
+            </form>
+          </div>
+          <!-- fin barra de busqueda -->
+
           <!-- Icono inicio de sesión -->
           <div class="col-2" >
             {% if request.user.is_authenticated %}
@@ -103,7 +104,6 @@
             </div>
           </nav>
           <!-- fin nav bar -->
-
         </div>
     </div>
 </header>
