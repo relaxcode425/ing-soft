@@ -13,7 +13,14 @@ urlpatterns = [
     path('nosotros',views.Nosotros, name='nosotros'),
     path('registro',views.Registro, name='registro'),
     path('tienda',views.Tienda, name='tienda'),
+    path('tienda-indumentaria',views.Tienda_indumentaria, name='tienda-indumentaria'),
+    path('ver-producto/<int:id_prod>',views.VerProducto, name='ver-producto'),
 
+    path('pago-carrito',views.pago_carrito, name='pago-carrito'),
+    path('addToCart',views.addToCart, name='addToCart'),
+    path('pagarCart',views.pagarCart, name='pagarCart'),
+    path('delToCart/<str:pk>',views.delToCart, name='delToCart'),
+    
     path('crud-varios', views.crud_varios, name='crud-varios'),
     path('crud-usuarios', views.crud_usuarios, name='crud-usuarios'),
     path('crud-arriendos', views.crud_arriendos, name='crud-arriendos'),

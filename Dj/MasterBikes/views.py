@@ -3,8 +3,10 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.db.models import Q
 from .forms import TipoUsuarioForm, TallaForm, BiciForm, FormaPagoForm, TipoProductoForm, EstadoForm, UsuarioForm
-from .models import TipoUsuario, Talla, TipoBici, FormaPago, TipoProducto, Estado, Usuario, Arriendo, Reparacion, Pago, Detalle, Despacho, Producto
+from .models import TipoUsuario, Talla, TipoBici, FormaPago, TipoProducto, Estado, Usuario, Arriendo, Reparacion, Pago, Detalle, Despacho, Producto, Carrito, Item
+from django.utils import timezone
 
 # Create your views here.
 """ --------------------------------------------------------------------------- """
@@ -92,7 +94,12 @@ def crud_varios(request):
 """ --------------------------------------------------------------------------- """
 
 def Principal(request):
-    context={}
+    carritos = Carrito.objects.all()
+    usuarios = Usuario.objects.all()
+    context={
+        "usuarios":usuarios,
+        "carritos":carritos
+    }
     return render(request, 'pages/Principal.html', context)
 @login_required
 def arriendo(request):
@@ -119,33 +126,111 @@ def registrar(request):
         last_name = request.POST.get('last_name')
         email = request.POST.get('email')
         password = request.POST.get('password')
+        confirm = request.POST.get('confirm')
         id_tipo_usuario = TipoUsuario.objects.get(tipo='Cliente')
 
-        # Validar y guardar los datos en la base de datos
-        if username and rut and first_name and last_name and email and password and id_tipo_usuario:
-            user = User(
-                username=username,
-                first_name=first_name,
-                last_name=last_name,
-                email=email,
-            )
-            user.set_password(password)  # Set the password using set_password
-            user.save()  # Save the user instance
+        if confirm == password:
+            # Validar y guardar los datos en la base de datos
+            if username and rut and first_name and last_name and email and password:
+                user = User(
+                    username=username,
+                    first_name=first_name,
+                    last_name=last_name,
+                    email=email,
+                )
+                user.set_password(password)
+                user.save()
 
-            usuario = Usuario(
-                rut=rut,
-                id_tipo_usuario=id_tipo_usuario,
-                user=user  # Associate the Usuario with the User
-            )
-            usuario.save()  # Save the usuario instance
-            login(request,user)
+                usuario = Usuario(
+                    rut=rut,
+                    id_tipo_usuario=id_tipo_usuario,
+                    user=user
+                )
+                usuario.save()
 
-            return redirect('Principal')
+                carrito = Carrito(rut=usuario)
+                carrito.save()
+                
+                login(request,user)
+                request.session["tipo"] = usuario.id_tipo_usuario.tipo
+
+                carritos = Carrito.objects.all()
+                usuarios = Usuario.objects.all()
+                context={
+                    "usuarios":usuarios,
+                    "carritos":carritos
+                }
+                return render(request, 'pages/Principal.html', context)
+        else:
+            context={
+                "message":"Sus contraseñas no coinciden",
+                "username":username,
+                "rut":rut,
+                "first_name":first_name,
+                "last_name":last_name,
+                "email":email,
+                "password":password,
+                "edit": True
+            }
+            return render(request,"pages/Registro.html",context)
     else:
         return render(request, 'registro.html')
+
 def Tienda(request):
-    context={}
+    usuarios = Usuario.objects.all()
+    tipo = TipoProducto.objects.get(tipo = "Bicicleta")
+    productos = Producto.objects.all().filter(id_tipo_producto = tipo)
+    carritos = Carrito.objects.all()
+    items = Item.objects.all()
+    context={
+        "usuarios":usuarios,
+        "productos":productos,
+        "carritos":carritos,
+        "items":items
+    }
     return render(request, 'pages/Tienda.html', context)
+
+def Tienda_indumentaria(request):
+    usuarios = Usuario.objects.all()
+    tipo = TipoProducto.objects.get(tipo = "Accesorio")
+    tipo2 = TipoProducto.objects.get(tipo = "Pieza")
+    productos = Producto.objects.all().filter(Q(id_tipo_producto = tipo)| Q(id_tipo_producto = tipo2))
+    carritos = Carrito.objects.all()
+    items = Item.objects.all()
+    context={
+        "usuarios":usuarios,
+        "productos":productos,
+        "carritos":carritos,
+        "items":items
+    }
+    return render(request, 'pages/Tienda.html', context)
+
+@login_required
+def pago_carrito(request):
+    formasPago = FormaPago.objects.all()
+    usuarios = Usuario.objects.all()
+    productos = Producto.objects.all()
+    carritos = Carrito.objects.all()
+    items = Item.objects.all()
+    usuario = Usuario.objects.get(user=request.user)
+    carrito = Carrito.objects.get(rut=usuario)
+    
+    confirm = False
+    for i in items:
+        if i.id_carrito == carrito:
+            confirm = True
+            item = i
+    context={
+        "confirmado":"confirmado",
+        "formasPago":formasPago,
+        "usuarios":usuarios,
+        "productos":productos,
+        "carritos":carritos,
+        "items":items,
+        "confirm":confirm
+    }
+    return render(request, 'pages/pago_carrito.html', context)
+
 """ --------------------------------------------------------------------------- """
 @login_required
 def add_tipoUsuario(request):
@@ -456,12 +541,13 @@ def conectar(request):
             login(request,user)
 
             us = Usuario.objects.get(user=user)
+            carrito = Carrito(
+                rut = us
+            )
+            carrito.save()
             request.session["tipo"] = us.id_tipo_usuario.tipo
             
-            context = {
-                
-            }
-            return render(request,"pages/Principal.html",context)
+            return redirect('Principal')
         else:
             context = {
                 "mensaje":"Usuario o contraseña incorrecta",
@@ -474,12 +560,214 @@ def conectar(request):
         }
         return render(request,"pages/login.html",context)
 
+@login_required
 def desconectar(request):
-    #del request.session["user"]
     if request.user.is_authenticated:
+        user = request.user
+        usuario = Usuario.objects.get(user=user)
+        rut = usuario.rut
+        try:
+            carrito = Carrito.objects.get(rut=rut)
+            if carrito:
+                items = Item.objects.all()
+                for tmp in items:
+                    if tmp.id_carrito == carrito:
+                        tmp.delete()
+                carrito.delete()
+        except:
+            a = 0
         logout(request)
-    context = {
-        "mensaje":"Sesion cerrada",
-        "design":"alert alert-info w-50 mx-auto text-center",
-    }
-    return render(request,"pages/login.html",context)
+    return redirect('login')
+""" --------------------------------------------------------------------------- """
+@login_required
+def addToCart(request):
+    id_prod = request.POST.get('id')
+    producto = Producto.objects.get(id_producto=id_prod)
+    cant = request.POST.get('cantidad')
+    if producto and cant:
+        usuario = Usuario.objects.get(user=request.user)
+        rut = usuario.rut
+        carrito = Carrito.objects.get(rut=rut)
+        subtotal = int(producto.precio) * int(cant)
+        item = Item(
+            id_carrito = carrito,
+            id_producto = producto,
+            cantidad = cant,
+            subtotal = subtotal
+        )
+        item.save()
+        nuevo = producto.stock - int(cant)
+        producto.stock = nuevo
+        producto.save()
+        
+        usuarios = Usuario.objects.all()
+        tipo = TipoProducto.objects.get(tipo = "Bicicleta")
+        productos = Producto.objects.all().filter(id_tipo_producto = tipo)
+        carritos = Carrito.objects.all()
+        items = Item.objects.all()
+        context={
+            "usuarios":usuarios,
+            "productos":productos,
+            "carritos":carritos,
+            "items":items
+        }
+
+        return render(request,"pages/tienda.html",context)
+    else:
+        usuarios = Usuario.objects.all()
+        tipo = TipoProducto.objects.get(tipo = "Bicicleta")
+        productos = Producto.objects.all().filter(id_tipo_producto = tipo)
+        carritos = Carrito.objects.all()
+        items = Item.objects.all()
+        context={
+            "usuarios":usuarios,
+            "productos":productos,
+            "carritos":carritos,
+            "items":items
+        }
+        return render(request,"pages/tienda.html",context)
+@login_required
+def delToCart(request,pk):
+    try:
+        item = Item.objects.get(id_item=pk)
+        
+        cant = item.cantidad
+        producto = Producto.objects.get(id_producto = item.id_producto.id_producto)
+        nuevo = producto.stock + int(cant)
+        producto.stock = nuevo
+        producto.save()
+        item.delete()
+
+        usuarios = Usuario.objects.all()
+        tipo = TipoProducto.objects.get(tipo = "Bicicleta")
+        productos = Producto.objects.all().filter(id_tipo_producto = tipo)
+        carritos = Carrito.objects.all()
+        items = Item.objects.all()
+        context={
+            "usuarios":usuarios,
+            "productos":productos,
+            "carritos":carritos,
+            "items":items
+        }
+        return render(request,"pages/tienda.html",context)
+    except:
+        usuarios = Usuario.objects.all()
+        tipo = TipoProducto.objects.get(tipo = "Bicicleta")
+        productos = Producto.objects.all().filter(id_tipo_producto = tipo)
+        carritos = Carrito.objects.all()
+        items = Item.objects.all()
+        context={
+            "usuarios":usuarios,
+            "productos":productos,
+            "carritos":carritos,
+            "items":items
+        }
+        return render(request,"pages/tienda.html",context)
+@login_required
+def pagarCart(request):
+    user = request.user
+    usuario = Usuario.objects.get(user=user)
+    carrito = Carrito.objects.get(rut=usuario)
+    items = Item.objects.all().filter(id_carrito = carrito)
+    if request.method == 'POST':
+        try:
+            total = 0
+            for tmp in items:
+                if tmp.id_carrito == carrito:
+                    subtotal = tmp.cantidad * tmp.id_producto.precio
+                    total = total + subtotal
+            seleccionado = request.POST.get("formaDePago")
+            forma = FormaPago.objects.get(id_forma_pago = seleccionado)
+            check = request.POST.get("despacho")
+            domicilio = False
+            if check:
+                domicilio = True
+            else:
+                domicilio = False
+            pago = Pago(
+                rut = usuario,
+                total = total,
+                id_forma_pago = forma,
+                domicilio = domicilio
+            )
+            pago.save()
+            if check:
+                tiempo = timezone.now()
+                despa = Despacho(
+                    id_pago = pago,
+                    pedido = tiempo
+                )
+                despa.save()
+            for tmp in items:
+                if tmp.id_carrito == carrito:
+                    subtotal = tmp.cantidad * tmp.id_producto.precio
+                    producto = tmp.id_producto
+                    cantidad = tmp.cantidad
+                    detalle = Detalle(
+                        id_pago = pago,
+                        id_producto = producto,
+                        cantidad = cantidad,
+                        subtotal = subtotal
+                    )
+                    detalle.save()
+                    tmp.delete()
+            carrito.delete()
+
+            carrito = Carrito(
+                rut = usuario
+            )
+            carrito.save()
+
+            usuarios = Usuario.objects.all()
+            carritos = Carrito.objects.all()
+            items = Item.objects.all()
+
+            formasPago = FormaPago.objects.all()
+            productos = Producto.objects.all()
+            carritos = Carrito.objects.all()
+            items = Item.objects.all()
+            usuario = Usuario.objects.get(user=request.user)
+            carrito = Carrito.objects.get(rut=usuario)
+            
+            confirm = False
+            for i in items:
+                if i.id_carrito == carrito:
+                    confirm = True
+                    item = i
+            context={
+                "message":"Compra exitosa...",
+                "formasPago":formasPago,
+                "usuarios":usuarios,
+                "productos":productos,
+                "carritos":carritos,
+                "items":items,
+                "confirm":confirm
+            }
+            return render(request, 'pages/pago_carrito.html', context)
+        except:
+            usuarios = Usuario.objects.all()
+            tipo = TipoProducto.objects.get(tipo = "Bicicleta")
+            productos = Producto.objects.all().filter(id_tipo_producto = tipo)
+            carritos = Carrito.objects.all()
+            items = Item.objects.all()
+            context={
+                "usuarios":usuarios,
+                "productos":productos,
+                "carritos":carritos,
+                "items":items
+            }
+            return render(request,"pages/tienda.html",context)
+    else:
+        usuarios = Usuario.objects.all()
+        tipo = TipoProducto.objects.get(tipo = "Bicicleta")
+        productos = Producto.objects.all().filter(id_tipo_producto = tipo)
+        carritos = Carrito.objects.all()
+        items = Item.objects.all()
+        context={
+            "usuarios":usuarios,
+            "productos":productos,
+            "carritos":carritos,
+            "items":items
+        }
+        return render(request,"pages/tienda.html",context)
+""" ------------------------------------------------------------------------------------- """
