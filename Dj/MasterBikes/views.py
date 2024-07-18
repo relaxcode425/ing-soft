@@ -58,22 +58,86 @@ def crud_reparacion(request):
     }
     return render(request, 'pages/despliegue/crud_reparacion.html', context)
 @login_required
-def crud_ventas(request):
-    pagos = Pago.objects.all()
+def crud_ventas(request,pk):
+    formapago = FormaPago.objects.all()
+    tipoproducto = TipoProducto.objects.all()
+    producto = Producto.objects.all()
     usuarios = Usuario.objects.all()
-    formaPago = FormaPago.objects.all()
-    detallePago = Detalle.objects.all()
-    productos = Producto.objects.all()
+    users = User.objects.all()
+    us = Usuario.objects.get(user=request.user)
+    rut = us.rut
+    pago = Pago.objects.all().filter(rut = rut)
+
+    f = 'filtro'
+    c = False
+    if pk == 0:
+        pago = Pago.objects.all().filter(rut = rut)
+    elif pk == 1:
+        pago = Pago.objects.all()
+        f = 'sin'
+        if us.id_tipo_usuario.tipo == 'Cliente':
+            c = True
+    else:
+        pago = Pago.objects.all().filter(rut = rut)
+    detalle = Detalle.objects.all()
     despachos = Despacho.objects.all()
-    context={
-        "pagos" : pagos,
-        "usuarios" : usuarios,
-        "formaPago" : formaPago,
-        "detallePago" : detallePago,
-        "productos" : productos,
-        "despachos" : despachos,
-    }
+    if c:
+        context={
+            "f":f,
+            "usuarios":usuarios,
+            "users":users,
+            "formapagos":formapago,
+            "tipoproductos":tipoproducto,
+            "productos":producto,
+            "pagos":pago,
+            "detalles":detalle,
+            "despachos":despachos
+        }
+    else:
+        context={
+            "f":f,
+            "a":"sssss",
+            "usuarios":usuarios,
+            "users":users,
+            "formapagos":formapago,
+            "tipoproductos":tipoproducto,
+            "productos":producto,
+            "pagos":pago,
+            "detalles":detalle,
+            "despachos":despachos
+        }
     return render(request, 'pages/despliegue/crud_ventas.html', context)
+@login_required
+def crud_despacho(request,pk):
+    despachos = Despacho.objects.all()
+    us = Usuario.objects.get(user=request.user)
+    despacho = Despacho.objects.all()
+
+    f = 'filtro'
+    c = False
+    if pk == 0:
+        despachos = Despacho.objects.all()
+    else:
+        f = 'sin'
+        pag = Pago.objects.get(id_pago = str(pk))
+        despacho = Despacho.objects.get(id_pago = pag)
+    detalles = Detalle.objects.all()
+    if c:
+        context={
+            "f":f,
+            "despacho":despacho,
+            "despachos":despachos,
+            "detalles":detalles
+        }
+    else:
+        context={
+            "f":f,
+            "a":"sssss",
+            "despacho":despacho,
+            "despachos":despachos,
+            "detalles":detalles
+        }
+    return render(request, 'pages/despliegue/crud_despacho.html', context)
 @login_required
 def crud_varios(request):
     tipoUsuarios = TipoUsuario.objects.all()
@@ -154,13 +218,7 @@ def registrar(request):
                 login(request,user)
                 request.session["tipo"] = usuario.id_tipo_usuario.tipo
 
-                carritos = Carrito.objects.all()
-                usuarios = Usuario.objects.all()
-                context={
-                    "usuarios":usuarios,
-                    "carritos":carritos
-                }
-                return render(request, 'pages/Principal.html', context)
+                return redirect('Principal')
         else:
             context={
                 "message":"Sus contraseñas no coinciden",
@@ -231,6 +289,15 @@ def pago_carrito(request):
     }
     return render(request, 'pages/pago_carrito.html', context)
 
+def VerProducto(request,id_prod):
+    producto = Producto.objects.get(id_producto=id_prod)
+    tipoProd = producto.id_tipo_producto
+    context = {
+        "producto":producto,
+        "tipoProd":tipoProd
+    }
+    return render(request, 'pages/Producto.html', context)
+
 """ --------------------------------------------------------------------------- """
 @login_required
 def add_tipoUsuario(request):
@@ -289,6 +356,7 @@ def del_tipoUsuario(request, pk):
             "mensaje": "Error,Tipo de usuario no encontrado...",
         }
         return render(request, "pages/crud-varios.html", context)
+
 @login_required
 def add_talla(request):
     form = TallaForm()
@@ -307,6 +375,7 @@ def add_talla(request):
             "form":form
         }
         return render(request,"pages/agregar/varios/add_talla.html",context)
+@login_required
 def del_talla(request, pk):
     try:
         talla = Talla.objects.get(id_talla=pk)
@@ -345,7 +414,7 @@ def del_talla(request, pk):
             "mensaje": "Error,Talla no encontrada...",
         }
         return render(request, "pages/despliegue/crud_varios.html", context)
-    
+
 @login_required
 def add_bici(request):
     form = BiciForm()
@@ -364,6 +433,7 @@ def add_bici(request):
             "form":form
         }
         return render(request,"pages/agregar/varios/add_TipoBici.html",context)
+
 @login_required
 def add_forma_pago(request):
     form = FormaPagoForm()
@@ -400,6 +470,7 @@ def add_tipo_producto(request):
             "form":form
         }
         return render(request,"pages/agregar/varios/add_tipoProducto.html",context)
+
 @login_required
 def add_estado(request):
     form = EstadoForm()
@@ -418,6 +489,7 @@ def add_estado(request):
             "form":form
         }
         return render(request,"pages/agregar/varios/add_estado.html",context)
+
 @login_required
 def add_usuario(request):
     form = UsuarioForm()
@@ -435,11 +507,93 @@ def add_usuario(request):
                 id_tipo_usuario=usuario_data["id_tipo_usuario"],
             )
             usuario.save()
-            return redirect("Principal")  # redirect to a success page
+            return redirect("crud-usuarios")
     context = {
         "form": form
     }
-    return render(request, "pages/agregar/varios/add_usuario.html", context)
+    return render(request, "pages/agregar/add_usuario.html", context)
+@login_required
+def del_usuario(request, pk):
+    try:
+        usuario = Usuario.objects.get(rut=pk)
+        user = User.objects.get(username=usuario.user.username)
+        user.delete()
+        usuario.delete()
+
+        usuarios = Usuario.objects.all()
+        tipoUsuarios = TipoUsuario.objects.all()
+        context={
+            "mensaje" : "Registro eliminado",
+            "usuarios" : usuarios,
+            "tipoUsuarios": tipoUsuarios,
+        }
+        return render(request, 'pages/despliegue/crud_usuarios.html', context)
+    except:
+        usuarios = Usuario.objects.all()
+        tipoUsuarios = TipoUsuario.objects.all()
+        context={
+            "usuarios" : usuarios,
+            "tipoUsuarios": tipoUsuarios,
+        }
+        return render(request, 'pages/despliegue/crud_usuarios.html', context)
+@login_required
+def edit_usuario(request,pk):
+
+    us = Usuario.objects.get(rut = pk)
+    user = User.objects.get(username=us.user.username)
+
+    username = user.username
+    rut = us.rut
+    first_name = user.first_name
+    last_name = user.last_name
+    email = user.email
+    tipo = us.id_tipo_usuario
+
+    if request.method == 'POST':
+
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
+        id_tipo = request.POST.get("tipousuario")
+        id_tipo_usuario = TipoUsuario.objects.get(id_tipo_usuario=id_tipo)
+
+        
+        user.first_name=first_name
+        user.last_name=last_name
+        user.email=email
+        
+        user.save()
+
+        us.id_tipo_usuario=id_tipo_usuario
+        
+        us.save()
+        tipos = TipoUsuario.objects.all()
+        context={
+            "message":"Actualizado correctamente",
+            "tipos":tipos,
+            "tipo":tipo,
+            "username":username,
+            "rut":rut,
+            "first_name":first_name,
+            "last_name":last_name,
+            "email":email
+        }
+        return render(request,"pages/editar/edit_usuario.html",context)
+    else:
+        tipos = TipoUsuario.objects.all()
+        context={
+            "tipos":tipos,
+            "tipo":tipo,
+            "username":username,
+            "rut":rut,
+            "first_name":first_name,
+            "last_name":last_name,
+            "email":email
+        }
+        return render(request,"pages/editar/edit_usuario.html",context)
+
+
+@login_required
 def del_tipoUser(request,pk):
     try:
         tipoUsuarios = TipoUsuario.objects.get(id_tipo_usuario=pk)

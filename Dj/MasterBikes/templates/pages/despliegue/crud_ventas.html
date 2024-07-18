@@ -10,228 +10,122 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"> 
 </head>
 <body>
-    {% include 'base/header_admin.html'%}
+    {% include 'base/header_admin.html' %}
     <main>
         <div class="container">
             <div class="row">
-                <div class="col-md shadow-lg mx-auto text-center p-3">
-                    <br>
-                    <h2 class="my-3">Compras</h2>
-                    <br>
-                    <h2 class="my-3">Lista de Pagos</h2><br>
-                    
-                    <table class="table table-dark table-hover table-bordered">
-                        <thead>
-                            <th>id</th>
-                            <th>Username</th>
-                            <th>Total del pago</th>
-                            <th>Forma de Pago</th>
-                            <th>Entrega a Domicilio</th>
-                            <th>Modificar</th>
-                            <th>Eliminar</th>
-                        </thead>
-                        <tbody>
-                            {% if pagos %}
-                                {% for tmp in pagos %}
-                                    <tr>
-                                        <td>{{tmp.id_pago}}</td>
-                                        
-                                        {% if usuarios %}
-                                            {% for user in usuarios %}
-                                                {% if tmp.rut.rut == user.rut %}
-                                                    <td>{{user.user.username}}</td>
+                <div class="col-md-8 shadow-lg mx-auto text-center p-3">
+                    {% if a %}
+                        {% if f == 'filtro' %}
+                            <h2 class="my-3">Lista de Compras</h2>
+                        {% elif f == 'sin' %}
+                            <h2 class="my-3">Lista de Ventas</h2>
+                        {% endif %}
+                        <br>
+                        <table class="table table-dark table-hover table-bordered">
+                            <thead>
+                                <th>Id</th>
+                                <th>Usuario</th>
+                                <th>Total</th>
+                                <th>Forma de pago</th>
+                                <th>Despacho</th>
+                                {% if request.session.tipo != 'Cliente' %}
+                                    <th>Modificar</th>
+                                    <th>Eliminar</th>
+                                {% endif %}
+                            </thead>
+                            <tbody>
+                                {% if pagos %}
+                                    {% for tmp in pagos %}
+                                        <tr>
+                                            <td>{{tmp.id_pago}}</td>
+                                            {% if usuarios %}
+                                                {% for us in usuarios %}
+                                                    {% if tmp.rut.rut == us.rut %}
+                                                        <td>{{us.user.username}}</td>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                            <td>
+                                                <details>
+                                                    <summary>{{tmp.total}}</summary>
+                                                    <table class="table table-dark table-striped d-block">
+                                                        <thead>
+                                                            <th>Id Detalle</th>
+                                                            <th>Producto</th>
+                                                            <th>Cantidad</th>
+                                                            <th>Subtotal</th>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% if detalles %}
+                                                            {% for det in detalles %}
+                                                                {% if det.id_pago.id_pago == tmp.id_pago %}
+                                                                    <tr>
+                                                                        <td>{{det.id_detalle}}</td>
+                                                                        <td>{{det.id_producto.nombre}}</td>
+                                                                        <td>{{det.cantidad}}</td>
+                                                                        <td>{{det.subtotal}}</td>
+                                                                    </tr>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                            {% endif %}
+                                                        </tbody>
+                                                    </table>
+                                                </details>
+                                            </td>
+                                            {% if formapagos %}
+                                                {% for forma in formapagos %}
+                                                    {% if tmp.id_forma_pago.id_forma_pago == forma.id_forma_pago %}
+                                                        <td>{{forma.forma}}</td>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                            {% if tmp.domicilio %}
+                                                {% if despachos %}
+                                                {% for despa in despachos %}
+                                                    {% if despa.id_pago.id_pago == tmp.id_pago %}
+                                                        {% if despa.recibo  %}
+                                                            <td><a href="{% url 'crud-despacho' pk=tmp.id_pago %}">Completado</a></td>
+                                                        {% else %}
+                                                            <td><a href="{% url 'crud-despacho' pk=tmp.id_pago %}">En proceso</a></td>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                {% endfor %}
                                                 {% endif %}
-                                            {% endfor%}
-                                        {% endif %}
-
-                                        <td>{{tmp.total}}$</td>
-                                        
-                                        {% if formaPago %}
-                                            {% for forma in formaPago %}
-                                                {% if forma.id_forma_pago == tmp.id_forma_pago.id_forma_pago %}
-                                                    <td>{{forma.forma}}</td>
-                                                {% endif %}
-                                            {% endfor%}
-                                        {% else %}
-                                            <td>No</td>
-                                        {% endif %}
-
-                                        {% if tmp.domicilio %}
-                                            <td>Si</td>
-                                        {% else %}
-                                            <td>No</td>
-                                        {% endif %}
-                                        
-                                        <td><a href=""><button
-                                            class="btn btn-warning">Modificar</button></a></td>
-                                        <td><a href=""><button
-                                            class="btn btn-danger">Eliminar</button></a></td>
-                                    </tr>
-                                {% endfor%}
-                            {% endif %}
-                        </tbody>
-                    </table>
-                    {% if mensaje%}
-                        <div class="alert alert-danger w-50 mx-auto">
-                            {{mensaje}}
+                                            {% else %}
+                                                <td>Sin despacho</td>
+                                            {% endif %}
+                                            {% if request.session.tipo != 'Cliente' %}
+                                                <td><a href=""><button class="btn btn-warning">Modificar</button></a></td>
+                                                <td><a href=""><button class="btn btn-danger">Eliminar</button></a></td>
+                                            {% endif %}
+                                        </tr>
+                                    {% endfor%}
+                                {% endif %}
+                            </tbody>
+                        </table>
+                        {% if mensaje%}
+                            <div class="alert alert-danger w-50 mx-auto">
+                                {{mensaje}}
+                            </div>
+                        {% endif%}
+                    {% else %}
+                        <div class="row">
+                            <div class="col-md-8 shadow-lg mx-auto text-center p-3">
+                                <h1>Error</h1>
+                                <h4>Vuelva a la página principal...</h4>
+                                <a href="{% url 'Principal' %}">
+                                    <button class="btn btn-outline-primary my-1">
+                                        Inicio
+                                    </button>
+                                </a>
+                            </div>
                         </div>
-                    {% endif%}
-                    <a href="">
-                        <button class="btn btn-primary">
-                            Agregar Registro
-                        </button>
-                    </a>
-                    <a href="{% url 'crud-varios' %}">
-                        <button class="btn btn-info">
-                            Ver formas de pago
-                        </button>
-                    </a>
+                    {% endif %}
                 </div>
             </div>
             <br>
             <br>
-            <div class="row">
-                <div class="col-md shadow-lg mx-auto text-center p-3">
-                    <br>
-                    <h2 class="my-3">Lista de Detalles de Pago</h2><br>
-                    
-                    <table class="table table-dark table-hover table-bordered">
-                        <thead>
-                            <th>id</th>
-                            <th>Pago al que Corresponde</th>
-                            <th>Producto pagado</th>
-                            <th>Cantidad</th>
-                            <th>Subtotal de la boleta</th>
-                            <th>Modificar</th>
-                            <th>Eliminar</th>
-                        </thead>
-                        <tbody>
-                            {% if detallePago %}
-                                {% for tmp in detallePago %}
-                                    <tr>
-                                        <td>{{tmp.id_detalle}}</td>
-                                        
-                                        {% if pagos %}
-                                            {% for pag in pagos %}
-                                                {% if pag.id_pago == tmp.id_pago.id_pago %}
-                                                    <td>{{pag.id_pago}}</td>
-                                                {% endif %}
-                                            {% endfor%}
-                                        {% endif %}
-
-                                        {% if productos %}
-                                            {% for pro in productos %}
-                                                {% if pro.id_producto == tmp.id_producto.id_producto %}
-                                                    <td>id:{{pro.id_producto}}-{{pro.nombre}}</td>
-                                                {% endif %}
-                                            {% endfor%}
-                                        {% endif %}
-
-                                        <td>{{tmp.cantidad}}</td>
-
-                                        <td>{{tmp.subtotal}}</td>
-                                        
-                                        <td><a href=""><button
-                                            class="btn btn-warning">Modificar</button></a></td>
-                                        <td><a href=""><button
-                                            class="btn btn-danger">Eliminar</button></a></td>
-                                    </tr>
-                                {% endfor%}
-                            {% endif %}
-                        </tbody>
-                    </table>
-                    {% if mensaje%}
-                        <div class="alert alert-danger w-50 mx-auto">
-                            {{mensaje}}
-                        </div>
-                    {% endif%}
-                    <a href="">
-                        <button class="btn btn-primary">
-                            Agregar Registro
-                        </button>
-                    </a>
-                    <a href="">
-                        <button class="btn btn-info">
-                            Ver Productos
-                        </button>
-                    </a>
-                </div>
-            </div>
-            <br>
-            <br>
-            <div class="row">
-                <div class="col-md shadow-lg mx-auto text-center p-3">
-                    <br>
-                    <h2 class="my-3">Lista de Despachos</h2><br>
-                    
-                    <table class="table table-dark table-hover table-bordered">
-                        <thead>
-                            <th>id</th>
-                            <th>Pago al que Corresponde</th>
-                            <th>Recibo de la Pedido</th>
-                            <th>Salida del Pedido</th>
-                            <th>Recibo del Pedido</th>
-                            <th>Modificar</th>
-                            <th>Eliminar</th>
-                        </thead>
-                        <tbody>
-                            {% if despachos %}
-                                {% for tmp in despachos %}
-                                    <tr>
-                                        <td>{{tmp.id_despacho}}</td>
-                                        
-                                        {% if pagos %}
-                                            {% for pag in pagos %}
-                                                {% if pag.id_pago == tmp.id_pago.id_pago %}
-                                                    <td>{{pag.id_pago}}</td>
-                                                {% endif %}
-                                            {% endfor%}
-                                        {% endif %}
-
-                                        {% if tmp.pedido == null or tmp.pedido == blank %}
-                                            <td>error</td>
-                                        {% else %}
-                                            <td>{{tmp.pedido}}</td>
-                                        {% endif %}
-
-                                        {% if tmp.envio == null or tmp.envio == blank %}
-                                            <td>Pendiente</td>
-                                        {% else %}
-                                            <td>{{tmp.envio}}</td>
-                                        {% endif %}
-
-                                        {% if tmp.recibo == null or tmp.recibo == blank %}
-                                            <td>Pendiente</td>
-                                        {% else %}
-                                            <td>{{tmp.recibo}}</td>
-                                        {% endif %}
-                                        
-                                        <td><a href=""><button
-                                            class="btn btn-warning">Modificar</button></a></td>
-                                        <td><a href=""><button
-                                            class="btn btn-danger">Eliminar</button></a></td>
-                                    </tr>
-                                {% endfor%}
-                            {% endif %}
-                        </tbody>
-                    </table>
-                    {% if mensaje%}
-                        <div class="alert alert-danger w-50 mx-auto">
-                            {{mensaje}}
-                        </div>
-                    {% endif%}
-                    <a href="">
-                        <button class="btn btn-primary">
-                            Agregar Registro
-                        </button>
-                    </a>
-                    <a href="">
-                        <button class="btn btn-info">
-                            Ver Productos
-                        </button>
-                    </a>
-                </div>
-            </div>
         </div>
     </main>
 

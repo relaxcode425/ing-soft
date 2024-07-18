@@ -27,8 +27,7 @@ $(document).ready(function () {
                     minlength: 6
                 },
                 confirm: {
-                    required: true,
-                    equalTo: "#pass"
+                    required: true
                 }
             },
             messages: {
